@@ -20,9 +20,15 @@ void UNetworkGameInstance::Init()
 		//sessionInterface->OnFindSessionsCompleteDelegates.AddUObject(this,
 		   //&UNetworkGameInstance::OnFoundSessions);
 	}
+	
+	FTimerHandle createHandler;
+	
+	GetWorld()->GetTimerManager().SetTimer(createHandler, FTimerDelegate::CreateLambda([&]() {
+	   CreateSession(mySessionName.ToString(), 5);
+	   }), 2.0f, false);
 }
 
-void UNetworkGameInstance::CreateSession(FString roomName, FString hostName, int32 playerCount)
+void UNetworkGameInstance::CreateSession(FString roomName, int32 playerCount)
 {
 	FOnlineSessionSettings sessionSettings;
 	sessionSettings.bIsDedicated = false;
@@ -41,10 +47,10 @@ void UNetworkGameInstance::CreateSession(FString roomName, FString hostName, int
 	//몇 년이 지나도, 다른 사람이 봐도 알 수 있게끔 변수이름을 설정해야한다.
 
 	// 커스텀 설정 값을 추가하기
-	sessionSettings.Set(FName("Room Name"), roomName
-	   , EOnlineDataAdvertisementType::Type::ViaOnlineServiceAndPing);
-	sessionSettings.Set(FName("Host Name"), hostName
-	   , EOnlineDataAdvertisementType::Type::ViaOnlineServiceAndPing);
+	// sessionSettings.Set(FName("Room Name"), roomName
+	//    , EOnlineDataAdvertisementType::Type::ViaOnlineServiceAndPing);
+	// sessionSettings.Set(FName("Host Name"), hostName
+	//    , EOnlineDataAdvertisementType::Type::ViaOnlineServiceAndPing);
 
 	sessionInterface->CreateSession(0, (FName)*roomName, sessionSettings);
 	UE_LOG(LogTemp, Warning, TEXT("Try to create session..."));
@@ -52,9 +58,9 @@ void UNetworkGameInstance::CreateSession(FString roomName, FString hostName, int
 
 }
 
-void UNetworkGameInstance::OncreatedSession(FName roomName, bool bWasSuccessful)
+void UNetworkGameInstance::OncreatedSession(FName sessionName, bool bWasSuccessful)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Session Name : %s"), *roomName.ToString());
+	UE_LOG(LogTemp, Warning, TEXT("Session Name : %s"), *sessionName.ToString());
 	UE_LOG(LogTemp, Warning, TEXT("Session Create : %s"),
 	   bWasSuccessful ? *FString("Success!") : *FString("Failed..."));
 }

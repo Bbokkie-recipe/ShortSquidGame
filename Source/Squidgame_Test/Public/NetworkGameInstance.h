@@ -20,12 +20,11 @@ public:
 
 	IOnlineSessionPtr sessionInterface;
 
-	void CreateSession(FString roomName, FString hostName, int32 playerCount);
+	void CreateSession(FString roomName, int32 playerCount);
 
 private:
-	
-	void OncreatedSession(FName roomName, bool bWasSuccessful);
+	FName mySessionName = FName("Sesac_Session");
 
-
+	void OncreatedSession(FName sessionName,  bool bWasSuccessful);
 	
 };
