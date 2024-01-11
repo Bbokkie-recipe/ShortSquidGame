@@ -20,7 +20,7 @@ public:
 
 	IOnlineSessionPtr sessionInterface;
 
-	void CreateSession(FString roomName, int32 playerCount);
+	void CreateSession(FString roomName, FString hostName, int32 playerCount);
 
 private:
 	FName mySessionName = FName("Sesac_Session");

@@ -23,15 +23,15 @@ void UNetworkGameInstance::Init()
 	
 	FTimerHandle createHandler;
 	
-	// 내 세션을 서버에 생성 요청(2초 지연)
-	GetWorld()->GetTimerManager().SetTimer(createHandler, FTimerDelegate::CreateLambda([&]() 
-		{
-			CreateSession(mySessionName.ToString(), 5);
-		}), 2.0f, false);
+	// 내 세션을 서버에 생성 요청(2초 지연)-주석처리함
+	//GetWorld()->GetTimerManager().SetTimer(createHandler, FTimerDelegate::CreateLambda([&]() 
+	//	{
+	//		CreateSession(mySessionName.ToString(), 5);
+	//	}), 2.0f, false);
 }
 
 	//서버에 세션 생성을 요청하는 함수
-void UNetworkGameInstance::CreateSession(FString roomName, int32 playerCount)
+void UNetworkGameInstance::CreateSession(FString roomName, FString hostName, int32 playerCount)
 {
 	//서버 생성시의 옵션을 설정하기 위한 구조체 변수
 	FOnlineSessionSettings sessionSettings;
@@ -51,11 +51,10 @@ void UNetworkGameInstance::CreateSession(FString roomName, int32 playerCount)
 	//몇 년이 지나도, 다른 사람이 봐도 알 수 있게끔 변수이름을 설정해야한다.
 
 	// 커스텀 설정 값을 추가하기
-	sessionSettings.Set(FName("Room Name"), FString("Come on yeah~"), EOnlineDataAdvertisementType::Type::ViaOnlineServiceAndPing);
-	sessionSettings.Set(FName("Host Name"), FString("Won Seok")
-	, EOnlineDataAdvertisementType::Type::ViaOnlineServiceAndPing);
+	sessionSettings.Set(FName("Room Name"), roomName, EOnlineDataAdvertisementType::Type::ViaOnlineServiceAndPing);
+	sessionSettings.Set(FName("Host Name"), hostName, EOnlineDataAdvertisementType::Type::ViaOnlineServiceAndPing);
 
-	sessionInterface->CreateSession(0, (FName)*roomName, sessionSettings);
+	sessionInterface->CreateSession(0, mySessionName, sessionSettings);
 	UE_LOG(LogTemp, Warning, TEXT("Try to create session..."));
 	UE_LOG(LogTemp, Warning, TEXT("Current Platform: %s"), *IOnlineSubsystem::Get()->GetSubsystemName().ToString());
 

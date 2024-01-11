@@ -39,5 +39,44 @@ public:
 	UPROPERTY(VisibleAnywhere, meta = (BindWidget), Category = "MySettings")
 	class UButton* btn_back;
 
+	UPROPERTY(VisibleAnywhere, meta = (BindWidget), Category = "MySettings")
+	class UWidgetSwitcher* ws_widgetSwicher;
+
+	UPROPERTY(VisibleAnywhere, meta = (BindWidget), Category = "MySettings")
+	class UButton* btn_MoveToCreatePanel;
+
+	UPROPERTY(VisibleAnywhere, meta = (BindWidget), Category = "MySettings")
+	class UButton* btn_MoveToFindPanel;
+
+	UPROPERTY(VisibleAnywhere, meta = (BindWidget), Category = "MySettings")
+	class UScrollBox* sb_roomList;
+
+	UPROPERTY(VisibleAnywhere, meta = (BindWidget), Category = "MySettings")
+	class UButton* btn_back2;
+
+	UPROPERTY(VisibleAnywhere, meta = (BindWidget), Category = "MySettings")
+	class UButton* btn_findSessions;
+
+
+private:
+	class UNetworkGameInstance* gi;
+
+	UFUNCTION()
+	void OnClickedCreateButton();
+
+	UFUNCTION()
+	void OnClickedBackButton();
+
+	UFUNCTION()
+	void OnSliderMoved(float value);
+
+	UFUNCTION()
+	void OnClickedMoveToCreate();
+
+	UFUNCTION()
+	void OnClickedMoveToFind();
+
+	UFUNCTION()
+	void OnClickedFindSessionsButton();
 
 };
