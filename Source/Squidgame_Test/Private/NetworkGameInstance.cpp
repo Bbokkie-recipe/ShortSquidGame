@@ -14,10 +14,8 @@ void UNetworkGameInstance::Init()
   
 	if(sessionInterface != nullptr)
 	{
-		//서버로부터 이벤트 값을 받을 함수를 연결한다.
 		sessionInterface->OnCreateSessionCompleteDelegates.AddUObject(this, &UNetworkGameInstance::OnCreatedSession);
-		//sessionInterface->OnFindSessionsCompleteDelegates.AddUObject(this,
-		   //&UNetworkGameInstance::OnFoundSessions);
+		sessionInterface->OnFindSessionsCompleteDelegates.AddUObject(this, &UNetworkGameInstance::OnFoundSessions);
 	}
 	
 	sessionInterface->OnJoinSessionCompleteDelegates.AddUObject(this, &UNetworkGameInstance::OnJoinedCompleted);
@@ -26,6 +24,18 @@ void UNetworkGameInstance::Init()
 
 void UNetworkGameInstance::FindSession()
 {
+	onFindButtonToggle.Broadcast(false);
+	sessionSearch = MakeShareable(new FOnlineSessionSearch()); // native c++ 스팀에서 제공
+	sessionSearch->bIsLanQuery = true;// 랜 연결로 된 것만 찾을 것인가?
+	sessionSearch->MaxSearchResults = 10;//최대 몇개까지 찾을 것인가?
+	//SEARCH_PRESENCE이 트루인 경우에만 
+	sessionSearch->QuerySettings.Set(SEARCH_PRESENCE, true, EOnlineComparisonOp::Type::Equals); // 특정 값과 일치하는 것만 // 문자열 조건부 검색
+	// 이퀄로 검색돌려줌 원하는 검색 조건을 추가할 수 있다
+
+	// 서버에 세션 검색을 요청
+	sessionInterface->FindSessions(0, sessionSearch.ToSharedRef());
+	//ToSharedRef 매개변수 참조자로 넣는다는건 변수 안에다 값을 채워주겠다는 뜻
+	//참조형태 넣어서 요청하면 다음 함수안에 알아서 찾은 결과들을 채워서 반환해줌
 }
 
 void UNetworkGameInstance::JoinSession(int32 roomNumber)
@@ -34,6 +44,31 @@ void UNetworkGameInstance::JoinSession(int32 roomNumber)
 
 void UNetworkGameInstance::OnFoundSessions(bool bWasSuccessful)
 {
+	TArray<FOnlineSessionSearchResult> results = sessionSearch->SearchResults;
+	UE_LOG(LogTemp, Warning, TEXT("Find Results: %s"), bWasSuccessful ? *FString("Success!") : *FString("Failed..."));
+	if (bWasSuccessful) {
+		int32 sessionNum = results.Num();
+		UE_LOG(LogTemp, Warning, TEXT("Session Count : %d"), results.Num());
+		// 응답 성공이면 클리어
+		onNewSearchComplete.Broadcast();
+		for (int32 i = 0; i < results.Num(); i++) {
+			FString foundRoomName;
+			// 전형적인 참조의 형태로 변수 반환이 아니라 인자로 넣으면 채워넣어줌
+			results[i].Session.SessionSettings.Get(FName("Room Name"), foundRoomName);
+			FString foundHostName;
+			results[i].Session.SessionSettings.Get(FName("Host Name"), foundHostName);
+			int32 maxPlayerCount = results[i].Session.SessionSettings.NumPublicConnections;
+			int32 currentPlayerCount = maxPlayerCount - results[i].Session.NumOpenPublicConnections; // 랜 연결때 오류가 있을 수 있다 스팀연결때는 잘뜬다
+			// ping은 회선 속도
+			// 회선 속도가 가장 느린 사람에 맞춘다.
+			int32 pingSpeed = results[i].PingInMs;
+			UE_LOG(LogTemp, Warning, TEXT("RoomName : %s\n Host Name : %s\n(%d/%d)\nPing: %d ms\n\n"), *foundRoomName, *foundHostName, currentPlayerCount, maxPlayerCount, pingSpeed);
+
+			//델리게이트 이벤트 실행하기 : 알릴 정보들 넘겨줌
+			onCreateSlot.Broadcast(foundRoomName, foundHostName, currentPlayerCount, maxPlayerCount, pingSpeed, i);
+		}
+		onFindButtonToggle.Broadcast(true);
+	}
 }
 
 void UNetworkGameInstance::OnJoinedCompleted(FName sessionName, EOnJoinSessionCompleteResult::Type result)

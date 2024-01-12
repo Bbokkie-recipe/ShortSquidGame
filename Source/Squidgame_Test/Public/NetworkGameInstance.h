@@ -28,7 +28,7 @@ public:
 	FSearchSessionDele onCreateSlot;
 
 	UPROPERTY(EditAnywhere, BlueprintAssignable, Category = "Mys")
-	FServerResponseDele onNewSearchComplete; // 라는 이벤트를 줄거야
+	FServerResponseDele onNewSearchComplete;
 
 	UPROPERTY(EditAnywhere, BlueprintAssignable, Category = "Mys")
 	FFindButtonStatus onFindButtonToggle;
