@@ -15,52 +15,59 @@ void UNetworkGameInstance::Init()
 	if(sessionInterface != nullptr)
 	{
 		//서버로부터 이벤트 값을 받을 함수를 연결한다.
-		sessionInterface->OnCreateSessionCompleteDelegates.AddUObject(this,
-		   &UNetworkGameInstance::OncreatedSession);
+		sessionInterface->OnCreateSessionCompleteDelegates.AddUObject(this, &UNetworkGameInstance::OnCreatedSession);
 		//sessionInterface->OnFindSessionsCompleteDelegates.AddUObject(this,
 		   //&UNetworkGameInstance::OnFoundSessions);
 	}
 	
-	FTimerHandle createHandler;
-	
-	GetWorld()->GetTimerManager().SetTimer(createHandler, FTimerDelegate::CreateLambda([&]() {
-	   CreateSession(mySessionName.ToString(), 5);
-	   }), 2.0f, false);
+	sessionInterface->OnJoinSessionCompleteDelegates.AddUObject(this, &UNetworkGameInstance::OnJoinedCompleted);
 }
 
-void UNetworkGameInstance::CreateSession(FString roomName, int32 playerCount)
+
+void UNetworkGameInstance::FindSession()
 {
+}
+
+void UNetworkGameInstance::JoinSession(int32 roomNumber)
+{
+}
+
+void UNetworkGameInstance::OnFoundSessions(bool bWasSuccessful)
+{
+}
+
+void UNetworkGameInstance::OnJoinedCompleted(FName sessionName, EOnJoinSessionCompleteResult::Type result)
+{
+}
+
+// <외부 ui에서 call할 함수> 서버에 세션 생성을 요청하는 함수
+void UNetworkGameInstance::CreateSession(FString roomName, FString hostName, int32 playerCount)
+{
+	// 서버 생성 시의 옵션을 설정하기 위한 구조체 변수
 	FOnlineSessionSettings sessionSettings;
-	sessionSettings.bIsDedicated = false;
-	sessionSettings.bAllowInvites = true; //초대가능 여부
-	sessionSettings.bAllowJoinInProgress = true; //게임 진행중에도 입장가능한가Y
-	sessionSettings.bAllowJoinViaPresence = true;
-	sessionSettings.bIsLANMatch = IOnlineSubsystem::Get()->GetSubsystemName() == "NULL" ? true : false;
-	//접속하는 방법 -> 스팀, LAN 등이 있는데, 위의 명령어는 해당 조건에 따라 바뀐다
-	//스팀이면 Steam 을 반환하고 LAN 연결이면 null값을 반환한다.
-	sessionSettings.bShouldAdvertise = true;
-	//다른사람이 session 을 찾으려고 할 때 session 목록에 해당 session 을 공개할 것인가?
-	sessionSettings.bUseLobbiesIfAvailable = true;
-	//로비를 사용할 것인가?
-	sessionSettings.NumPublicConnections = playerCount;
+	sessionSettings.bIsDedicated = false; // 리슨 서버
+	sessionSettings.bAllowInvites = true; // 다른 사람 초대 수락여부
+	sessionSettings.bAllowJoinInProgress = true;// 플레이 도중에 다른 사람 진입 가능
+	sessionSettings.bAllowJoinViaPresence = true; // 현재 상태 기능 이용한 초대 기능
+	sessionSettings.bIsLANMatch = IOnlineSubsystem::Get()->GetSubsystemName() == "NULL" ? true : false; // true는 랜연결, false는 스팀 등 다른 서버 경유
+	sessionSettings.bShouldAdvertise = true; // 광고를 할꺼니: 다른 사람이 세션 찾으려고 하면 내가 세션 목록에 '검색'이 됨
+	// 내가 초대하려고 하는 애들끼리면 private session이라 false가 되어야함
+	sessionSettings.bUseLobbiesIfAvailable = true; 
+	sessionSettings.NumPublicConnections = playerCount; 
 
-	//몇 년이 지나도, 다른 사람이 봐도 알 수 있게끔 변수이름을 설정해야한다.
+	sessionSettings.Set(FName("Room Name"), roomName, EOnlineDataAdvertisementType::Type::ViaOnlineServiceAndPing);
+	sessionSettings.Set(FName("Host Name"), hostName, EOnlineDataAdvertisementType::Type::ViaOnlineServiceAndPing);
 
-	// 커스텀 설정 값을 추가하기
-	// sessionSettings.Set(FName("Room Name"), roomName
-	//    , EOnlineDataAdvertisementType::Type::ViaOnlineServiceAndPing);
-	// sessionSettings.Set(FName("Host Name"), hostName
-	//    , EOnlineDataAdvertisementType::Type::ViaOnlineServiceAndPing);
-
-	sessionInterface->CreateSession(0, (FName)*roomName, sessionSettings);
-	UE_LOG(LogTemp, Warning, TEXT("Try to create session..."));
+	sessionInterface->CreateSession(0, mySessionName, sessionSettings); 
+	UE_LOG(LogTemp, Warning, TEXT("Try to Create Session..."));
 	UE_LOG(LogTemp, Warning, TEXT("Current Platform: %s"), *IOnlineSubsystem::Get()->GetSubsystemName().ToString());
-
 }
 
-void UNetworkGameInstance::OncreatedSession(FName sessionName, bool bWasSuccessful)
+void UNetworkGameInstance::OnCreatedSession(FName sessionName, bool bWasSuccessful) // 만들어졌으면bWasSuccessful true
 {
-	UE_LOG(LogTemp, Warning, TEXT("Session Name : %s"), *sessionName.ToString());
-	UE_LOG(LogTemp, Warning, TEXT("Session Create : %s"),
-	   bWasSuccessful ? *FString("Success!") : *FString("Failed..."));
+	UE_LOG(LogTemp, Warning, TEXT("Session Name: %s"), *sessionName.ToString());
+	UE_LOG(LogTemp, Warning, TEXT("Session Create: %s"), bWasSuccessful ? *FString("Success!") : *FString("Failed..."));
+	// 멀티 플레이를 할 맵으로 이동한다.
+	// 호스트가 자기가 레벨 파일을 가지고 있다(따라서 이동하고자 하는 레벨 파일의 경로를 써준다.
+	GetWorld()->ServerTravel("/Game/Map/PlayMap?Listen", true);
 }
