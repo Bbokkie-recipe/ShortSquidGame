@@ -40,6 +40,7 @@ void UNetworkGameInstance::FindSession()
 
 void UNetworkGameInstance::JoinSession(int32 roomNumber)
 {
+	sessionInterface->JoinSession(0, mySessionName, sessionSearch->SearchResults[roomNumber]);
 }
 
 void UNetworkGameInstance::OnFoundSessions(bool bWasSuccessful)
@@ -73,6 +74,38 @@ void UNetworkGameInstance::OnFoundSessions(bool bWasSuccessful)
 
 void UNetworkGameInstance::OnJoinedCompleted(FName sessionName, EOnJoinSessionCompleteResult::Type result)
 {
+	UE_LOG(LogTemp, Warning, TEXT("Joined Session: %s"), *sessionName.ToString());
+	switch (result)
+	{
+	case EOnJoinSessionCompleteResult::Success:
+	{
+		APlayerController* pc = GetWorld()->GetFirstPlayerController();
+		FString url;
+		//NAME_GamePort라고 하면
+		sessionInterface->GetResolvedConnectString(sessionName, url, NAME_GamePort);// 특정 세션에 이름을 넣어주면 그 ip 주소를 문자열로 받아옴
+		//pc->ClientTravel();
+		UE_LOG(LogTemp, Warning, TEXT("url: %s Joihn Success!"), *url);
+		pc->ClientTravel(url, ETravelType::TRAVEL_Absolute);
+		break;
+	}
+	case EOnJoinSessionCompleteResult::SessionIsFull:
+		UE_LOG(LogTemp, Warning, TEXT("Session Is Full"));
+		break;
+	case EOnJoinSessionCompleteResult::SessionDoesNotExist:
+		UE_LOG(LogTemp, Warning, TEXT("Session Does Not Exist!"));
+		break;
+	case EOnJoinSessionCompleteResult::CouldNotRetrieveAddress:
+		UE_LOG(LogTemp, Warning, TEXT("Could Not Retrieve Address!"));
+		break;
+	case EOnJoinSessionCompleteResult::AlreadyInSession:
+		UE_LOG(LogTemp, Warning, TEXT("you are Already In Session!"));
+		break;
+	case EOnJoinSessionCompleteResult::UnknownError:
+		UE_LOG(LogTemp, Warning, TEXT("Unknown Error!"));
+		break;
+	default:
+		break;
+	}
 }
 
 // <외부 ui에서 call할 함수> 서버에 세션 생성을 요청하는 함수
@@ -85,8 +118,8 @@ void UNetworkGameInstance::CreateSession(FString roomName, FString hostName, int
 	sessionSettings.bAllowJoinInProgress = true;// 플레이 도중에 다른 사람 진입 가능
 	sessionSettings.bAllowJoinViaPresence = true; // 현재 상태 기능 이용한 초대 기능
 	sessionSettings.bIsLANMatch = IOnlineSubsystem::Get()->GetSubsystemName() == "NULL" ? true : false; // true는 랜연결, false는 스팀 등 다른 서버 경유
-	sessionSettings.bShouldAdvertise = true; // 광고를 할꺼니: 다른 사람이 세션 찾으려고 하면 내가 세션 목록에 '검색'이 됨
-	// 내가 초대하려고 하는 애들끼리면 private session이라 false가 되어야함
+	sessionSettings.bShouldAdvertise = true; // 광고: 다른 사람이 세션 찾으려고 하면 내가 세션 목록에 '검색'이 됨
+	// 내가 초대하려고 하는 애들끼리면 private session이라 false
 	sessionSettings.bUseLobbiesIfAvailable = true; 
 	sessionSettings.NumPublicConnections = playerCount; 
 

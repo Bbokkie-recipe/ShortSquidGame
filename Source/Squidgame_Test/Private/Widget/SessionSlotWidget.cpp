@@ -26,6 +26,6 @@ void USessionSlotWidget::SetSessionInfo(const FString roomName, const FString ho
 void USessionSlotWidget::OnClickedJoinButton()
 {
 	if (gi != nullptr) {
-		//gi->JoinSession(roomIndex);
+		gi->JoinSession(roomIndex);
 	}
 }
