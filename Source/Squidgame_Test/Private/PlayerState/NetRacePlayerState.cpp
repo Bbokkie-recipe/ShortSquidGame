@@ -6,6 +6,8 @@
 
 ANetRacePlayerState::ANetRacePlayerState()
 {
+	bIsReady = false;
+	bIsHostStart = false;
 	bReplicates = true;
 }
 

@@ -4,6 +4,29 @@
 #include "GameMode/NetRaceGameMode.h"
 #include "Net/UnrealNetwork.h"
 #include "Components/AudioComponent.h"
+#include "PlayerController/NetRacePlayerController.h"
+
+void ANetRaceGameMode::PostLogin(APlayerController* NewPlayer)
+{
+    Super::PostLogin(NewPlayer);
+    ANetRacePlayerController* NewPC = Cast<ANetRacePlayerController>(NewPlayer);
+    if (true == ::IsValid(NewPC))
+    {
+        AlivePCs.Add(NewPC);
+    }
+}
+
+void ANetRaceGameMode::Logout(AController* Exiting)
+{
+    Super::Logout(Exiting);
+    ANetRacePlayerController* ExitingPC = Cast<ANetRacePlayerController>(Exiting);
+    if (true == ::IsValid(ExitingPC) && INDEX_NONE != AlivePCs.Find(ExitingPC))
+    {
+        AlivePCs.Remove(ExitingPC);
+        DeadPCs.Add(ExitingPC);
+    }
+}
+
 
 ANetRaceGameMode::ANetRaceGameMode()
 {

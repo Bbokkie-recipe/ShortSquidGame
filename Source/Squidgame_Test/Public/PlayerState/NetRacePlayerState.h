@@ -41,6 +41,12 @@ public:
 
 	UFUNCTION(Server, Reliable, WithValidation)
 	void SetRank_Server(float _Rank);
+public:
+	UPROPERTY(Replicated)
+	bool bIsReady;
+
+	UPROPERTY(Replicated)
+	bool bIsHostStart;
 
 	UPROPERTY(Replicated)
 	bool isDead = false;

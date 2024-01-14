@@ -13,5 +13,6 @@ UCLASS()
 class SQUIDGAME_TEST_API ANetRacePlayerController : public APlayerController
 {
 	GENERATED_BODY()
-	
+public:
+	ANetRacePlayerController();
 };

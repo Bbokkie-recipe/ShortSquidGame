@@ -3,3 +3,6 @@
 
 #include "PlayerController/NetRacePlayerController.h"
 
+ANetRacePlayerController::ANetRacePlayerController()
+{
+}
