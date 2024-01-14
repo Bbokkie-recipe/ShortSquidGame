@@ -41,7 +41,11 @@ ANetRaceGameMode::ANetRaceGameMode()
 
 void ANetRaceGameMode::BeginPlay()
 {
-    StartDoolAudio();
+    FTimerHandle createHandler;
+    GetWorld()->GetTimerManager().SetTimer(createHandler, FTimerDelegate::CreateLambda([&]() {
+        StartDoolAudio();
+        }), 20.0f, false);
+    //StartDoolAudio();
 }
 
 void ANetRaceGameMode::StartDoolAudio()
