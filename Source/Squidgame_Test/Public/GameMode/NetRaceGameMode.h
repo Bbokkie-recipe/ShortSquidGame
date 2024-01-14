@@ -13,5 +13,8 @@ UCLASS()
 class SQUIDGAME_TEST_API ANetRaceGameMode : public AGameMode
 {
 	GENERATED_BODY()
-	
+public:
+	ANetRaceGameMode();
+	UPROPERTY(Replicated)
+	float ReplicatedTime;
 };
