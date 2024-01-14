@@ -13,5 +13,10 @@ UCLASS()
 class SQUIDGAME_TEST_API ANetRacePlayerState : public APlayerState
 {
 	GENERATED_BODY()
-	
+private:
+	bool isDead = false;
+	bool HasCrossedFinishLine = false;
+public:
+	bool GetisDead();
+	bool GetHasCrossedFinish();
 };

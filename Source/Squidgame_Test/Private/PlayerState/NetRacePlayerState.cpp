@@ -3,3 +3,12 @@
 
 #include "PlayerState/NetRacePlayerState.h"
 
+bool ANetRacePlayerState::GetisDead()
+{
+	return isDead;
+}
+
+bool ANetRacePlayerState::GetHasCrossedFinish()
+{
+	return HasCrossedFinishLine;
+}

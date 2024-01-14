@@ -17,5 +17,5 @@ void ANetRaceGameMode::GetLifetimeReplicatedProps(TArray< FLifetimeProperty >& O
 {
     // 시간 변수를 복제하도록 설정
     Super::GetLifetimeReplicatedProps(OutLifetimeProps);
-    //DOREPLIFETIME(GetWorld()->GetAuthGameMode(), ReplicatedTime);
+    DOREPLIFETIME(ANetRaceGameMode, ReplicatedTime);
 }
