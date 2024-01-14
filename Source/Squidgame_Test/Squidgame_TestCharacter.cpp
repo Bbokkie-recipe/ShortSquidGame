@@ -10,6 +10,7 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
+#include "Net/UnrealNetwork.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -127,4 +128,12 @@ void ASquidgame_TestCharacter::Look(const FInputActionValue& Value)
 		AddControllerYawInput(LookAxisVector.X);
 		AddControllerPitchInput(LookAxisVector.Y);
 	}
+}
+
+void ASquidgame_TestCharacter::GetLifetimeReplicatedProps(TArray< FLifetimeProperty >& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+	DOREPLIFETIME(ASquidgame_TestCharacter, rank); // 매크로 함수c(클래스명) v(변수)
+	// DOREPLIFETIME(ASquidgame_TestCharacter클래스에 있는 rank변수를 replicated 즉 변화된 상태를 복사하겠다 복제하겠다
+	// 서버에 등록
 }

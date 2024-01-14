@@ -6,7 +6,6 @@
 #include "GameFramework/Character.h"
 #include "Logging/LogMacros.h"
 #include "Squidgame_TestCharacter.generated.h"
-
 class USpringArmComponent;
 class UCameraComponent;
 class UInputMappingContext;
@@ -46,8 +45,13 @@ class ASquidgame_TestCharacter : public ACharacter
 
 public:
 	ASquidgame_TestCharacter();
-	
 
+public:
+	FORCEINLINE void SetRank(int32 _rank) { rank = _rank; }
+
+private:
+	UPROPERTY(replicated)
+	int32 rank;
 protected:
 
 	/** Called for movement input */
