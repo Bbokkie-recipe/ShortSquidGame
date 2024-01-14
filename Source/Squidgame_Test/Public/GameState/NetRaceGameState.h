@@ -17,7 +17,7 @@ enum class EGamePlayState : uint8
 	GameOver,
 };
 UCLASS()
-class SQUIDGAME_TEST_API ANetRaceGameState : public AGameState
+class SQUIDGAME_TEST_API ANetRaceGameState : public AGameState //GameState는 게임 상태를 저장하고 모든 플레이어에게 동기화
 {
 	GENERATED_BODY()
 public:
