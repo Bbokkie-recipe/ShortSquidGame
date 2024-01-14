@@ -23,10 +23,11 @@ class SQUIDGAME_TEST_API ANetRaceGameState : public AGameState
 public:
 	ANetRaceGameState();
 public:
+	UPROPERTY(Replicated)
 	int32 GameStartTime;
-
+	UPROPERTY(Replicated)
 	int32 GameEndTime;
-
+	UPROPERTY(Replicated)
 	EGamePlayState GameState;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Squid_Game")

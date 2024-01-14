@@ -88,4 +88,5 @@ void ANetRaceGameState::GetLifetimeReplicatedProps(TArray< FLifetimeProperty >& 
     Super::GetLifetimeReplicatedProps(OutLifetimeProps);
     DOREPLIFETIME(ANetRaceGameState, GameState);
 	DOREPLIFETIME(ANetRaceGameState, GameStartTime);
+    DOREPLIFETIME(ANetRaceGameState, GameEndTime);
 }
