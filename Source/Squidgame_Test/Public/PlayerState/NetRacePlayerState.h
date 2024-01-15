@@ -41,6 +41,8 @@ public:
 
 	UFUNCTION(Server, Reliable, WithValidation)
 	void SetRank_Server(float _Rank);
+
+	void SetReady();
 public:
 	UPROPERTY(Replicated)
 	bool bIsReady;
@@ -62,8 +64,16 @@ public:
 
 	UPROPERTY(Replicated)
 	int32 Rank;
+
+	UPROPERTY(Replicated)
+	FString PlayerName;
+
 public:
 	bool GetisDead();
 	bool GetHasCrossedFinish();
+	void ToggleReadyState();
 	virtual void GetLifetimeReplicatedProps(TArray< FLifetimeProperty >& OutLifetimeProps) const override;
+public:
+	UFUNCTION(Server, Unreliable) 
+		void ServerReadyGame();
 };

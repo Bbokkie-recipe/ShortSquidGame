@@ -21,7 +21,16 @@ public:
 	class UTextBlock* text_ready;
 
 	UPROPERTY(VisibleAnywhere, meta = (BindWidget), Category = "SquidGame")
+	class UTextBlock* notifyNotready;
+
+	UPROPERTY(VisibleAnywhere, meta = (BindWidget), Category = "SquidGame")
 	class UButton* readyButton;
+
+	FTimerHandle NotifyTimerHandle;
 private:
 	class ASquidgame_TestCharacter* player;
+	UFUNCTION()
+	void OnClickedReadyButton();
+	void HideNotifyNotReady();
+	void ShowNotifyNotReady();
 };

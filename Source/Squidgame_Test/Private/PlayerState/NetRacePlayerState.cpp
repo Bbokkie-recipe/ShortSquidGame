@@ -6,8 +6,11 @@
 
 ANetRacePlayerState::ANetRacePlayerState()
 {
-	bIsReady = false;
-	bIsHostStart = false;
+	if (HasAuthority())
+	{
+		bIsReady = false;
+		bIsHostStart = false;
+	}
 	bReplicates = true;
 }
 
@@ -72,6 +75,11 @@ int32 ANetRacePlayerState::GetRank() const
 	return Rank;
 }
 
+void ANetRacePlayerState::SetReady()
+{
+	ServerReadyGame();
+}
+
 
 bool ANetRacePlayerState::GetisDead()
 {
@@ -91,4 +99,10 @@ void ANetRacePlayerState::GetLifetimeReplicatedProps(TArray< FLifetimeProperty >
 	DOREPLIFETIME(ANetRacePlayerState, ArrivalTime);
 	DOREPLIFETIME(ANetRacePlayerState, DeathTime);
 	DOREPLIFETIME(ANetRacePlayerState, Rank);
+	DOREPLIFETIME(ANetRacePlayerState, bIsReady);
+}
+
+void ANetRacePlayerState::ServerReadyGame_Implementation()
+{
+	bIsReady = true;
 }

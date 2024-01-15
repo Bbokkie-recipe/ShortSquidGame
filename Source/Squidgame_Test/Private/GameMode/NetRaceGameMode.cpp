@@ -5,7 +5,8 @@
 #include "Net/UnrealNetwork.h"
 #include "Components/AudioComponent.h"
 #include "PlayerController/NetRacePlayerController.h"
-
+#include "GameState/NetRaceGameState.h"
+#include "PlayerState/NetRacePlayerState.h"
 void ANetRaceGameMode::PostLogin(APlayerController* NewPlayer)
 {
     Super::PostLogin(NewPlayer);
@@ -13,6 +14,7 @@ void ANetRaceGameMode::PostLogin(APlayerController* NewPlayer)
     if (true == ::IsValid(NewPC))
     {
         AlivePCs.Add(NewPC);
+        UE_LOG(LogTemp, Log, TEXT("ANetRaceGameMode %d"), AlivePCs.Num());
     }
 }
 
@@ -39,6 +41,7 @@ ANetRaceGameMode::ANetRaceGameMode()
     SearchAudio = CreateDefaultSubobject<UAudioComponent>(TEXT("SearchAudio"));
 }
 
+/*
 void ANetRaceGameMode::BeginPlay()
 {
     FTimerHandle createHandler;
@@ -46,7 +49,7 @@ void ANetRaceGameMode::BeginPlay()
         StartDoolAudio();
         }), 20.0f, false);
     //StartDoolAudio();
-}
+}*/
 
 void ANetRaceGameMode::StartDoolAudio()
 {
@@ -81,6 +84,36 @@ void ANetRaceGameMode::StartSearchAudio()
             false
         );
     }
+}
+
+//void ANetRaceGameMode::StartPlay()
+bool ANetRaceGameMode::ReadyPlay()
+{
+    bool AllPlayersReady = false;
+    TArray<TObjectPtr<APlayerState>> Players = GameState->PlayerArray;
+    if (Players.Num() == 1) { // Single Play
+        AllPlayersReady = true;
+    }
+    else {
+        for (APlayerState* PlayerState : Players) {
+            ANetRacePlayerState* PS = Cast<ANetRacePlayerState>(PlayerState);
+            if (PS && !(PS->bIsReady))
+            {
+                AllPlayersReady = false;
+                break;
+            }
+            AllPlayersReady = true;
+        }
+    }
+
+    if (AllPlayersReady)
+    {
+        FTimerHandle createHandler;
+        GetWorld()->GetTimerManager().SetTimer(createHandler, FTimerDelegate::CreateLambda([&]() {
+            StartDoolAudio();
+            }), 3.0f, false);
+    }
+    return AllPlayersReady;
 }
 
 void ANetRaceGameMode::GetLifetimeReplicatedProps(TArray< FLifetimeProperty >& OutLifetimeProps) const
