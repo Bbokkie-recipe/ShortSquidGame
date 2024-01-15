@@ -10,6 +10,8 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
+#include "Net/UnrealNetwork.h"
+#include "Widget/ReadyWidget.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -65,6 +67,14 @@ void ASquidgame_TestCharacter::BeginPlay()
 		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
 		{
 			Subsystem->AddMappingContext(DefaultMappingContext, 0);
+		}
+	}
+	localRole = GetLocalRole();
+	remoteRole = GetRemoteRole();
+	if (readyWidget != nullptr && GetController() && GetController()->IsLocalPlayerController()) {
+		readyUI = CreateWidget<UReadyWidget>(GetWorld(), readyWidget);
+		if (readyUI != nullptr) {
+			readyUI->AddToViewport();
 		}
 	}
 }
