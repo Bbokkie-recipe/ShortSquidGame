@@ -6,7 +6,6 @@
 #include "GameFramework/Character.h"
 #include "Logging/LogMacros.h"
 #include "Squidgame_TestCharacter.generated.h"
-
 class USpringArmComponent;
 class UCameraComponent;
 class UInputMappingContext;
@@ -46,7 +45,6 @@ class ASquidgame_TestCharacter : public ACharacter
 
 public:
 	ASquidgame_TestCharacter();
-	
 
 protected:
 
