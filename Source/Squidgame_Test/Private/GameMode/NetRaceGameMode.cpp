@@ -7,6 +7,7 @@
 #include "PlayerController/NetRacePlayerController.h"
 #include "GameState/NetRaceGameState.h"
 #include "PlayerState/NetRacePlayerState.h"
+
 void ANetRaceGameMode::PostLogin(APlayerController* NewPlayer)
 {
     Super::PostLogin(NewPlayer);

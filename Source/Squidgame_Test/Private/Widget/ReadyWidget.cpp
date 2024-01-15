@@ -58,8 +58,7 @@ void UReadyWidget::OnClickedReadyButton()
 				{
 					bool isReadyComplete = GameMode->ReadyPlay();
 					if (isReadyComplete)
-					{
-						// 困连 力芭
+					{   // 困连 力芭
 						RemoveFromParent();
 					}
 					else {
@@ -83,20 +82,6 @@ void UReadyWidget::HideNotifyNotReady()
 
 void UReadyWidget::ShowNotifyNotReady()
 {
-	int32 zero = 0;
-	ANetRaceGameMode* GameMode = Cast<ANetRaceGameMode>(GetWorld()->GetAuthGameMode());
-	TArray<TObjectPtr<APlayerState>> Players = GameMode->GameState->PlayerArray;
-	for (APlayerState* PlayerState : Players) {
-		ANetRacePlayerState* PS = Cast<ANetRacePlayerState>(PlayerState);
-		if (PS && !(PS->bIsReady))
-		{
-			zero++;
-			notifyNotready->SetText(FText::FromString(PS->GetActorNameOrLabel()));
-			text_ready->SetText(FText::AsNumber(zero));
-        }
-	}
-	//notifyNotready->SetText(FText::AsNumber(zero));
-	//notifyNotready->SetText(FText::AsNumber(zero));
 	notifyNotready->SetVisibility(ESlateVisibility::Visible);
 	GetWorld()->GetTimerManager().SetTimer(NotifyTimerHandle, this, &UReadyWidget::HideNotifyNotReady, 3.0f, false);
 }
