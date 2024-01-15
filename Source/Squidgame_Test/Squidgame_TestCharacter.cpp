@@ -49,6 +49,8 @@ ASquidgame_TestCharacter::ASquidgame_TestCharacter()
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
 	FollowCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
+	
+	runTimer = 0;
 
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
@@ -69,6 +71,16 @@ void ASquidgame_TestCharacter::BeginPlay()
 	}
 }
 
+void ASquidgame_TestCharacter::Tick(float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
+	
+	if (!runReady)
+	{
+		RunCooltimeTimer(DeltaSeconds);
+	}
+}
+
 //////////////////////////////////////////////////////////////////////////
 // Input
 
@@ -86,6 +98,8 @@ void ASquidgame_TestCharacter::SetupPlayerInputComponent(UInputComponent* Player
 
 		// Looking
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &ASquidgame_TestCharacter::Look);
+
+		EnhancedInputComponent->BindAction(RunAction, ETriggerEvent::Triggered, this, &ASquidgame_TestCharacter::Run);
 	}
 	else
 	{
@@ -126,5 +140,42 @@ void ASquidgame_TestCharacter::Look(const FInputActionValue& Value)
 		// add yaw and pitch input to controller
 		AddControllerYawInput(LookAxisVector.X);
 		AddControllerPitchInput(LookAxisVector.Y);
+	}
+}
+
+void ASquidgame_TestCharacter::Run()
+{
+	if (runReady)
+	{
+		if (bRunning)
+		{
+			GetCharacterMovement()->MaxWalkSpeed = 500.f;
+			bRunning = false;
+			runReady = false;
+			if (GEngine)
+				GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Running!"));
+		}
+		else
+		{
+			GetCharacterMovement()->MaxWalkSpeed = 250.f;
+			bRunning = true;
+			runReady = false;
+			if (GEngine)
+				GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Walking!"));
+		}
+	}
+}
+
+void ASquidgame_TestCharacter::RunCooltimeTimer(float deltaTime)
+{
+	
+	if (runTimer < coolTime)
+	{
+		runTimer += deltaTime;
+	}
+	else if (runTimer >= coolTime)
+	{
+		runReady = true;
+		runTimer = 0;
 	}
 }

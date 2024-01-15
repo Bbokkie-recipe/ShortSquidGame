@@ -43,8 +43,25 @@ class ASquidgame_TestCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* LookAction;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* RunAction;
+
 public:
 	ASquidgame_TestCharacter();
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Run)
+	float playerSpeed = 500.f;
+
+	UPROPERTY(BlueprintReadOnly)
+	bool bRunning = false;
+
+	float coolTime = 1.0f;
+
+	float runTimer;
+
+	bool runReady = true;
+
+
 
 protected:
 
@@ -53,6 +70,10 @@ protected:
 
 	/** Called for looking input */
 	void Look(const FInputActionValue& Value);
+
+	void Run();
+
+	void RunCooltimeTimer(float deltaTime);
 			
 
 protected:
@@ -61,6 +82,8 @@ protected:
 	
 	// To add mapping context
 	virtual void BeginPlay();
+
+	virtual void Tick(float DeltaSeconds) override;
 
 public:
 	/** Returns CameraBoom subobject **/
