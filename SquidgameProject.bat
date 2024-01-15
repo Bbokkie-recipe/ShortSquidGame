@@ -1,1 +1,1 @@
-"C:\Program Files\Epic Games\UE_5.3\Engine\Binaries\Win64\UnrealEditor.exe" "C:\Users\SBAuser\Documents\Unreal Projects\Squidgame_Test\Squidgame_Test.uproject" -game -log -ResX = 800 -ResY = 600  -WinX = 100 -WinY = 100
+"C:\Program Files\Epic Games\UE_5.3\Engine\Binaries\Win64\UnrealEditor.exe" "C:\Users\SBAuser\Documents\Unreal Projects\ShortSquidGame\Squidgame_Test.uproject" -game -log -ResX = 800 -ResY = 600  -WinX = 100 -WinY = 100
