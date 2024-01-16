@@ -35,7 +35,9 @@ public:
 	UAudioComponent* SearchAudio; // 감시 사운드
 protected:
 	FTimerHandle SongTimerHandle;
-	virtual void BeginPlay() override;
+	//virtual void BeginPlay() override;
 	void StartDoolAudio();
 	void StartSearchAudio();
+public:
+	bool ReadyPlay();
 };
