@@ -22,6 +22,13 @@ protected:
 public:	
 
 	virtual void Tick(float DeltaTime) override;
+	
+	void SwitchTimer(float deltaTime);
+
+	void DetectingMode(float deltaTime);
+
+	bool isDetecting = false;
+
 private:
 	UPROPERTY(VisibleAnywhere, Category = "Doll")
 	TObjectPtr<class UBoxComponent> BoxComponent;
@@ -34,4 +41,18 @@ private:
 
 	UPROPERTY(VisibleAnywhere, Category = "Doll")
 	TObjectPtr<class UStaticMeshComponent> BowTieStaticMesh;
+
+private:
+	float switchCooltime = 4.f;
+
+	float detectCooltime = 3.f;
+
+	float switchTimerTime = 0.f;
+
+	float detectTimerTime = 0.f;
+
+	float multiplier; 
+
+	float angleAxis;
+
 };

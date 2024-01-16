@@ -74,6 +74,8 @@ protected:
 	void Run();
 
 	void RunCooltimeTimer(float deltaTime);
+
+	void CheckMovement();
 			
 
 protected:
@@ -98,5 +100,9 @@ private:
 	class UReadyWidget* readyUI;
 	enum ENetRole localRole;
 	enum ENetRole remoteRole;
+
+	FVector capture_Pos;
+	FVector capture_Rot;
+
 };
 

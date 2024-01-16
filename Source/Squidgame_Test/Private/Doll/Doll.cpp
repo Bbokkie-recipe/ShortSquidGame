@@ -20,6 +20,8 @@ ADoll::ADoll()
 
 	BowTieStaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("BowTieStaticMesh"));
 	BowTieStaticMesh->SetupAttachment(RootComponent);
+	
+	multiplier = 50.0f;
 }
 
 // Called when the game starts or when spawned
@@ -34,5 +36,52 @@ void ADoll::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	if (!isDetecting)
+	{
+		SwitchTimer(DeltaTime);
+	}
+	else if (isDetecting)
+	{
+		DetectingMode(DeltaTime);
+	}
+
+}
+
+void ADoll::SwitchTimer(float deltaTime)
+{
+	if (switchTimerTime < switchCooltime)
+	{
+		switchTimerTime += deltaTime;
+	}
+	else
+	{
+		switchTimerTime = 0.f;
+		isDetecting = true;
+		if (GEngine)
+			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("DetectMode!"));
+	}
+}
+
+void ADoll::DetectingMode(float deltaTime)
+{
+	/*angleAxis = deltaTime * multiplier;
+
+	FRotator NewRotation = FRotator(0, angleAxis, 0);
+
+	HeadStaticMesh->SetRelativeRotation(NewRotation);
+	doll 머리 움직이기는 것 구현하기 */
+
+
+	if (detectTimerTime < detectCooltime)
+	{
+		detectTimerTime += deltaTime;
+	}
+	else
+	{
+		detectTimerTime = 0.f;
+		isDetecting = false;
+		if (GEngine)
+			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Waiting.."));
+	}
 }
 
