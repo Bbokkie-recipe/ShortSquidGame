@@ -95,7 +95,7 @@ void ANetRaceGameState::GetLifetimeReplicatedProps(TArray< FLifetimeProperty >& 
 
 bool ANetRaceGameState::ReadyPlay()
 {
-    if (DollActor == nullptr) {
+    if (FoundDoll == nullptr) {
         SearchDoll();
     }
     bool AllPlayersReady = false;
@@ -119,7 +119,7 @@ bool ANetRaceGameState::ReadyPlay()
     {
         FTimerHandle createHandler;
         GetWorld()->GetTimerManager().SetTimer(createHandler, FTimerDelegate::CreateLambda([&]() {
-            DollActor->StartDoolAudio();
+            FoundDoll->StartDoolAudio();
             }), 2.0f, false);
     }
     return AllPlayersReady;
@@ -127,11 +127,7 @@ bool ANetRaceGameState::ReadyPlay()
 
 void ANetRaceGameState::SearchDoll()
 {
-    Super::BeginPlay();
-    TArray<AActor*> FoundActors;
-    UGameplayStatics::GetAllActorsOfClass(GetWorld(), ADoll::StaticClass(), FoundActors);
-    if (FoundActors.Num() > 0)
-    {
-        DollActor = Cast<ADoll>(FoundActors[0]);
+    if (HasAuthority()) {
+        FoundDoll = Cast<ADoll>(UGameplayStatics::GetActorOfClass(GetWorld(), ADoll::StaticClass()));
     }
 }

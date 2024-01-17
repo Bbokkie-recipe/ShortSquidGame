@@ -41,7 +41,7 @@ protected:
 
 protected:
 	UPROPERTY()
-	class ADoll* DollActor;
+	class ADoll* FoundDoll;
 public:
 	bool IsGameOverCondition() const;
 	void StartGame();
