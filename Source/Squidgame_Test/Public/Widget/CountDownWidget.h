@@ -13,5 +13,10 @@ UCLASS()
 class SQUIDGAME_TEST_API UCountDownWidget : public UUserWidget
 {
 	GENERATED_BODY()
-	
+public:
+	UPROPERTY(meta = (BindWidget))
+	class UTextBlock* CountdownText;
+
+	UFUNCTION(BlueprintCallable)
+	void UpdateCountdownText(int32 CountdownValue);
 };
