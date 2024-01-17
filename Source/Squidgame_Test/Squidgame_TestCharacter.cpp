@@ -189,3 +189,8 @@ void ASquidgame_TestCharacter::RunCooltimeTimer(float deltaTime)
 		runTimer = 0;
 	}
 }
+
+void ASquidgame_TestCharacter::CheckMovement()
+{
+	
+}
