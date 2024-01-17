@@ -12,6 +12,9 @@
 #include "InputActionValue.h"
 #include "Net/UnrealNetwork.h"
 #include "Widget/ReadyWidget.h"
+#include "Doll/Doll.h"
+#include "Runtime/Engine/Public/EngineUtils.h"
+#include "Kismet/KismetMathLibrary.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -89,6 +92,8 @@ void ASquidgame_TestCharacter::Tick(float DeltaSeconds)
 	{
 		RunCooltimeTimer(DeltaSeconds);
 	}
+
+	StartDetect();
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -190,7 +195,35 @@ void ASquidgame_TestCharacter::RunCooltimeTimer(float deltaTime)
 	}
 }
 
-void ASquidgame_TestCharacter::CheckMovement()
+void ASquidgame_TestCharacter::CheckMovement(bool isDetecting)
 {
-	
+	currentPos = GetActorLocation();
+	currentRot = GetActorRotation();
+
+	if (isDetecting)
+	{
+		FVector subtractVector = UKismetMathLibrary::Subtract_VectorVector(currentPos, originPos);
+
+		if (GEngine)
+			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("%f, %f, %f"),subtractVector.X, subtractVector.Y, subtractVector.Z));
+	}
+	else if (!isDetecting)
+	{
+		originPos = currentPos;
+		originRot = currentRot;
+	}
+}
+
+void ASquidgame_TestCharacter::StartDetect()
+{
+	for (TActorIterator<ADoll>_doll(GetWorld()); _doll; ++_doll)
+	{
+		if (_doll)
+		{
+			if (GEngine)
+				GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("dollActor is working"));
+			bool bDetect = _doll->isDetecting;
+			CheckMovement(bDetect);
+		}
+	}
 }

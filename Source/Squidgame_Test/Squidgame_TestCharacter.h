@@ -75,7 +75,9 @@ protected:
 
 	void RunCooltimeTimer(float deltaTime);
 
-	void CheckMovement();
+	void CheckMovement(bool isDetecting);
+
+	void StartDetect();
 			
 
 protected:
@@ -96,13 +98,14 @@ public:
 public:
 	UPROPERTY(EditAnywhere, Category = "SquidGame")
 	TSubclassOf<class UReadyWidget> readyWidget;
+
 private:
 	class UReadyWidget* readyUI;
 	enum ENetRole localRole;
 	enum ENetRole remoteRole;
 
-	FVector capture_Pos;
-	FVector capture_Rot;
+	FVector currentPos, originPos;
+	FRotator currentRot, originRot;
 
 };
 
