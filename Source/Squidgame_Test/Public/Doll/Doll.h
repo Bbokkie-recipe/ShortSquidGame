@@ -60,8 +60,6 @@ private:
 	float switchTimerTime = 0.f;
 
 	float detectTimerTime = 0.f;
-<<<<<<< HEAD
-=======
 
 	float multiplier; 
 
@@ -70,5 +68,4 @@ private:
 protected:
 	FTimerHandle SongTimerHandle;
 
->>>>>>> 0994c6b79dc535fda3dc66e01b3390ab3167e00a
 };
