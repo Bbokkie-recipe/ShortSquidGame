@@ -37,9 +37,6 @@ ANetRaceGameMode::ANetRaceGameMode()
 
     // 시간 변수가 복제되도록 설정
     bReplicates = true;
-    //bReplicateInstigator = true;
-    DoolAudio = CreateDefaultSubobject<UAudioComponent>(TEXT("DoolAudio"));
-    SearchAudio = CreateDefaultSubobject<UAudioComponent>(TEXT("SearchAudio"));
 }
 
 /*
@@ -52,71 +49,7 @@ void ANetRaceGameMode::BeginPlay()
     //StartDoolAudio();
 }*/
 
-void ANetRaceGameMode::StartDoolAudio()
-{
-    if (DoolAudio)
-    {
-        DoolAudio->Play();
-        float SongALength = DoolAudio->Sound->GetDuration();
-
-        GetWorldTimerManager().SetTimer(
-            SongTimerHandle,
-            this,
-            &ANetRaceGameMode::StartSearchAudio,
-            SongALength,
-            false
-        );
-    }
-}
-
-void ANetRaceGameMode::StartSearchAudio()
-{
-    UE_LOG(LogTemp, Warning, TEXT("StartSearchAudio"));
-    if (SearchAudio)
-    {
-        SearchAudio->Play();
-        float SongBLength = SearchAudio->Sound->GetDuration();
-
-        GetWorldTimerManager().SetTimer(
-            SongTimerHandle,
-            this,
-            &ANetRaceGameMode::StartDoolAudio,
-            SongBLength,
-            false
-        );
-    }
-}
-
 //void ANetRaceGameMode::StartPlay()
-bool ANetRaceGameMode::ReadyPlay()
-{
-    bool AllPlayersReady = false;
-    TArray<TObjectPtr<APlayerState>> Players = GameState->PlayerArray;
-    if (Players.Num() == 1) { // Single Play
-        AllPlayersReady = true;
-    }
-    else {
-        for (APlayerState* PlayerState : Players) {
-            ANetRacePlayerState* PS = Cast<ANetRacePlayerState>(PlayerState);
-            if (PS && !(PS->bIsReady))
-            {
-                AllPlayersReady = false;
-                break;
-            }
-            AllPlayersReady = true;
-        }
-    }
-
-    if (AllPlayersReady)
-    {
-        FTimerHandle createHandler;
-        GetWorld()->GetTimerManager().SetTimer(createHandler, FTimerDelegate::CreateLambda([&]() {
-            StartDoolAudio();
-            }), 3.0f, false);
-    }
-    return AllPlayersReady;
-}
-
 void ANetRaceGameMode::GetLifetimeReplicatedProps(TArray< FLifetimeProperty >& OutLifetimeProps) const
 {
     // 시간 변수를 복제하도록 설정

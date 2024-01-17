@@ -27,6 +27,10 @@ public:
 
 	void DetectingMode(float deltaTime);
 
+	void StartDoolAudio();
+
+	void StartSearchAudio();
+
 	bool isDetecting = false;
 
 private:
@@ -42,6 +46,12 @@ private:
 	UPROPERTY(VisibleAnywhere, Category = "Doll")
 	TObjectPtr<class UStaticMeshComponent> BowTieStaticMesh;
 
+	UPROPERTY(EditAnywhere, Category = "SquidAudio")
+	UAudioComponent* DoolAudio; // 무궁화꽃이 피었습니다 사운드
+
+	UPROPERTY(EditAnywhere, Category = "Audio")
+	UAudioComponent* SearchAudio; // 감시 사운드
+
 private:
 	float switchCooltime = 4.f;
 
@@ -54,5 +64,8 @@ private:
 	float multiplier; 
 
 	float angleAxis;
+
+protected:
+	FTimerHandle SongTimerHandle;
 
 };
