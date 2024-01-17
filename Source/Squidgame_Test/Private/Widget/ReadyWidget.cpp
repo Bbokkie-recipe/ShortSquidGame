@@ -53,10 +53,10 @@ void UReadyWidget::OnClickedReadyButton()
 			if (player->GetLocalRole() == ENetRole::ROLE_Authority) {
 				ANetRacePlayerState* PlayerState = Cast<ANetRacePlayerState>(OwningController->PlayerState);
 				PlayerState->SetReady();
-				ANetRaceGameMode* GameMode = Cast<ANetRaceGameMode>(GetWorld()->GetAuthGameMode());
-				if (GameMode)
+				ANetRaceGameState* GameState = GetWorld()->GetGameState<ANetRaceGameState>();
+				if (GameState)
 				{
-					bool isReadyComplete = GameMode->ReadyPlay();
+					bool isReadyComplete = GameState->ReadyPlay();
 					if (isReadyComplete)
 					{   // À§Á¬ Á¦°Å
 						RemoveFromParent();
