@@ -6,7 +6,7 @@
 #include "PlayerState/NetRacePlayerState.h"
 #include "Doll/Doll.h"
 #include "Kismet/GameplayStatics.h"
-
+#include "GameMode/NetRaceGameMode.h"
 ANetRaceGameState::ANetRaceGameState()
 {
     int32 PlayerCount = PlayerArray.Num();
@@ -22,6 +22,10 @@ ANetRaceGameState::ANetRaceGameState()
 void ANetRaceGameState::StartGame()
 {
     GameState = EGamePlayState::InProgress;
+    FString LogMessage = FString::Printf(TEXT("VariableName: %d"), PlayerArray.Num());
+    FColor MessageColor = FColor::Green;
+    float DisplayTime = 5.0f;
+    //GEngine->AddOnScreenDebugMessage(-1, DisplayTime, MessageColor, LogMessage);
 }
 
 void ANetRaceGameState::EndGame()
@@ -117,10 +121,20 @@ bool ANetRaceGameState::ReadyPlay()
 
     if (AllPlayersReady)
     {
+        for (APlayerState* PlayerState : Players) {
+            //UE_LOG(LogTemp, Warning, TEXT("APlayerState* PlayerState : Players"));
+            ANetRaceGameMode* MyGameMode = Cast<ANetRaceGameMode>(UGameplayStatics::GetGameMode(GetWorld()));
+            if (MyGameMode)
+            {
+                //UE_LOG(LogTemp, Warning, TEXT("MyGameMode->StartRaceGame()"));
+                MyGameMode->StartRaceGame();
+            }
+        }
+
         FTimerHandle createHandler;
         GetWorld()->GetTimerManager().SetTimer(createHandler, FTimerDelegate::CreateLambda([&]() {
             FoundDoll->StartDoolAudio();
-            }), 2.0f, false);
+            }), 1.0f, false);
     }
     return AllPlayersReady;
 }

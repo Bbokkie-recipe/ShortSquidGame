@@ -10,18 +10,13 @@ ANetRacePlayerController::ANetRacePlayerController()
 void ANetRacePlayerController::BeginPlay()
 {
 	Super::BeginPlay();
-	if (CountDownWidget != nullptr && this && this->IsLocalPlayerController()) {
-		CountDownUI = CreateWidget<UCountDownWidget>(GetWorld(), CountDownWidget);
-		if (CountDownUI != nullptr) {
-			CountDownUI->AddToViewport();
-		}
-	}
 }
 
 void ANetRacePlayerController::StartCountdown()
 {
-	CountdownValue = 180;
-	GetWorldTimerManager().SetTimer(CountdownTimerHandle, this, &ANetRacePlayerController::UpdateCountdown, 1.0f, true);
+    if (HasAuthority()) {
+        ServerStartCountdown();
+    }
 }
 
 void ANetRacePlayerController::UpdateCountdown()
@@ -44,4 +39,23 @@ void ANetRacePlayerController::UpdateCountdown()
             CountDownUI->UpdateCountdownText(CountdownValue);
         }
     }
+}
+
+void ANetRacePlayerController::ServerStartCountdown_Implementation()
+{
+    MulticastCountdown();
+}
+
+void ANetRacePlayerController::MulticastCountdown_Implementation()
+{
+    if (CountDownWidget != nullptr && CountDownUI == nullptr && this && this->IsLocalPlayerController()) {
+        CountDownUI = CreateWidget<UCountDownWidget>(GetWorld(), CountDownWidget);
+        if (CountDownUI != nullptr) {
+            CountDownUI->AddToViewport();
+        }
+    }
+    //UE_LOG(LogTemp, Warning, TEXT("ServerStartCountdown_Implementation called on PlayerController: %s"), *GetName());
+    CountdownValue = 180;
+    GetWorldTimerManager().SetTimer(CountdownTimerHandle, this, &ANetRacePlayerController::UpdateCountdown, 1.0f, true);
+    //UE_LOG(LogTemp, Warning, TEXT("Multicast MulticastCountdown_Implementation!")); // Å¬¶ó¸¸
 }
