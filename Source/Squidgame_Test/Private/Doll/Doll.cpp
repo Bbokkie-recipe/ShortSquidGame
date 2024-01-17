@@ -21,7 +21,6 @@ ADoll::ADoll()
 	BowTieStaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("BowTieStaticMesh"));
 	BowTieStaticMesh->SetupAttachment(RootComponent);
 	
-	multiplier = 50.0f;
 }
 
 // Called when the game starts or when spawned

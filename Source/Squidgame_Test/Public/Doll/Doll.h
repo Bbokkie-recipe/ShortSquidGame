@@ -50,9 +50,4 @@ private:
 	float switchTimerTime = 0.f;
 
 	float detectTimerTime = 0.f;
-
-	float multiplier; 
-
-	float angleAxis;
-
 };
