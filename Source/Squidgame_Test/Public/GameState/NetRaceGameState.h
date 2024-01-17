@@ -22,6 +22,8 @@ class SQUIDGAME_TEST_API ANetRaceGameState : public AGameState //GameState´Â °ÔÀ
 	GENERATED_BODY()
 public:
 	ANetRaceGameState();
+
+	void SearchDoll();
 public:
 	UPROPERTY(Replicated)
 	int32 GameStartTime;
@@ -32,9 +34,14 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Squid_Game")
 	float TimeLimitInSeconds;
+
+	bool ReadyPlay();
 protected:
 	virtual void DefaultTimer() override;
 
+protected:
+	UPROPERTY()
+	class ADoll* DollActor;
 public:
 	bool IsGameOverCondition() const;
 	void StartGame();

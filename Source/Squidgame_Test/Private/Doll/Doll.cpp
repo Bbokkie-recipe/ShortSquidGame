@@ -4,6 +4,11 @@
 #include "Doll/Doll.h"
 #include "Components/BoxComponent.h"
 #include "Components/StaticMeshComponent.h"
+#include "Net/UnrealNetwork.h"
+#include "Components/AudioComponent.h"
+#include "PlayerController/NetRacePlayerController.h"
+#include "GameState/NetRaceGameState.h"
+#include "PlayerState/NetRacePlayerState.h"
 
 ADoll::ADoll()
 {
@@ -20,6 +25,9 @@ ADoll::ADoll()
 
 	BowTieStaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("BowTieStaticMesh"));
 	BowTieStaticMesh->SetupAttachment(RootComponent);
+
+	DoolAudio = CreateDefaultSubobject<UAudioComponent>(TEXT("DoolAudio"));
+	SearchAudio = CreateDefaultSubobject<UAudioComponent>(TEXT("SearchAudio"));
 	
 	multiplier = 50.0f;
 }
@@ -85,3 +93,37 @@ void ADoll::DetectingMode(float deltaTime)
 	}
 }
 
+void ADoll::StartDoolAudio()
+{
+	if (DoolAudio)
+	{
+		DoolAudio->Play();
+		float SongALength = DoolAudio->Sound->GetDuration();
+
+		GetWorldTimerManager().SetTimer(
+			SongTimerHandle,
+			this,
+			&ADoll::StartSearchAudio,
+			SongALength,
+			false
+		);
+	}
+}
+
+void ADoll::StartSearchAudio()
+{
+	UE_LOG(LogTemp, Warning, TEXT("StartSearchAudio"));
+	if (SearchAudio)
+	{
+		SearchAudio->Play();
+		float SongBLength = SearchAudio->Sound->GetDuration();
+
+		GetWorldTimerManager().SetTimer(
+			SongTimerHandle,
+			this,
+			&ADoll::StartDoolAudio,
+			SongBLength,
+			false
+		);
+	}
+}

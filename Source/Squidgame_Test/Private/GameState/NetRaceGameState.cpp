@@ -4,6 +4,8 @@
 #include "GameState/NetRaceGameState.h"
 #include "Net/UnrealNetwork.h"
 #include "PlayerState/NetRacePlayerState.h"
+#include "Doll/Doll.h"
+#include "Kismet/GameplayStatics.h"
 
 ANetRaceGameState::ANetRaceGameState()
 {
@@ -89,4 +91,47 @@ void ANetRaceGameState::GetLifetimeReplicatedProps(TArray< FLifetimeProperty >& 
     DOREPLIFETIME(ANetRaceGameState, GameState);
 	DOREPLIFETIME(ANetRaceGameState, GameStartTime);
     DOREPLIFETIME(ANetRaceGameState, GameEndTime);
+}
+
+bool ANetRaceGameState::ReadyPlay()
+{
+    if (DollActor == nullptr) {
+        SearchDoll();
+    }
+    bool AllPlayersReady = false;
+    TArray<TObjectPtr<APlayerState>> Players = this->PlayerArray;
+    if (Players.Num() == 1) { // Single Play
+        AllPlayersReady = true;
+    }
+    else {
+        for (APlayerState* PlayerState : Players) {
+            ANetRacePlayerState* PS = Cast<ANetRacePlayerState>(PlayerState);
+            if (PS && !(PS->bIsReady))
+            {
+                AllPlayersReady = false;
+                break;
+            }
+            AllPlayersReady = true;
+        }
+    }
+
+    if (AllPlayersReady)
+    {
+        FTimerHandle createHandler;
+        GetWorld()->GetTimerManager().SetTimer(createHandler, FTimerDelegate::CreateLambda([&]() {
+            DollActor->StartDoolAudio();
+            }), 2.0f, false);
+    }
+    return AllPlayersReady;
+}
+
+void ANetRaceGameState::SearchDoll()
+{
+    Super::BeginPlay();
+    TArray<AActor*> FoundActors;
+    UGameplayStatics::GetAllActorsOfClass(GetWorld(), ADoll::StaticClass(), FoundActors);
+    if (FoundActors.Num() > 0)
+    {
+        DollActor = Cast<ADoll>(FoundActors[0]);
+    }
 }

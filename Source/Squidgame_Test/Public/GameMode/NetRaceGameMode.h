@@ -27,17 +27,4 @@ public:
 	ANetRaceGameMode();
 	UPROPERTY(Replicated)
 	float ReplicatedTime;
-
-	UPROPERTY(EditAnywhere, Category = "SquidAudio")
-	UAudioComponent* DoolAudio; // 무궁화꽃이 피었습니다 사운드
-
-	UPROPERTY(EditAnywhere, Category = "Audio")
-	UAudioComponent* SearchAudio; // 감시 사운드
-protected:
-	FTimerHandle SongTimerHandle;
-	//virtual void BeginPlay() override;
-	void StartDoolAudio();
-	void StartSearchAudio();
-public:
-	bool ReadyPlay();
 };
