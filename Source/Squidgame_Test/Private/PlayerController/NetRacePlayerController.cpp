@@ -25,6 +25,9 @@ void ANetRacePlayerController::StartCountdown()
 
 void ANetRacePlayerController::UpdateCountdown()
 {
+    if (HasAuthority()) {
+        ShowStateLog();
+    }
     //ShowStateLog();
     CountdownValue--;
     if (CountdownValue <= 0)
