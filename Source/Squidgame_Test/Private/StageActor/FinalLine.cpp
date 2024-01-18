@@ -46,8 +46,11 @@ void AFinalLine::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* Oth
 {
 	ASquidgame_TestCharacter* player = Cast<ASquidgame_TestCharacter>(OtherActor);
 
-	if (player != nullptr) {
-		if (HasAuthority()) {
+	if (player != nullptr) 
+	{
+		if (HasAuthority()) 
+		{
+
 		}
 	}
 }

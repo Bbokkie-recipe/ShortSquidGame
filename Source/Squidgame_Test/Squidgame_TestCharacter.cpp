@@ -17,6 +17,8 @@
 #include "Kismet/KismetMathLibrary.h"
 #include "Math/Vector.h"
 #include "PlayerState/NetRacePlayerState.h"
+#include "GameFramework/PlayerState.h"
+#include "Kismet/GameplayStatics.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -95,7 +97,10 @@ void ASquidgame_TestCharacter::Tick(float DeltaSeconds)
 		RunCooltimeTimer(DeltaSeconds);
 	}
 
-	StartDetect();
+	if (bDetecting)
+	{
+		StartDetect();
+	}
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -208,6 +213,7 @@ void ASquidgame_TestCharacter::CheckMovement(bool isDetecting)
 
 		if (subtractVector != FVector(0, 0, 0))
 		{
+
 			if (GEngine)
 				GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Dead"));
 
@@ -243,6 +249,24 @@ void ASquidgame_TestCharacter::StartDetect()
 
 void ASquidgame_TestCharacter::Dead()
 {
-	ANetRacePlayerState* const playerState = GetWorld() != NULL ? GetWorld()->GetGameState<ANetRacePlayerState>() : NULL;
-	playerState->isDead = true;
+	APlayerController* myController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+	if (myController != nullptr)
+	{
+		ANetRacePlayerState* const playerState = myController->GetPlayerState<ANetRacePlayerState>();
+		if (playerState != nullptr)
+		{
+			playerState->isDead = true;
+		}
+	}
+	
+	bDetecting = false;
+
+	UAnimInstance* animInstance = GetMesh()->GetAnimInstance();
+	if (animInstance)
+	{
+		animInstance->Montage_Play(DeadAnimMontage);
+		GetController()->SetIgnoreMoveInput(true);
+
+		UGameplayStatics::PlaySoundAtLocation(this, GunFiredSound, GetActorLocation(), 1);
+	}
 }

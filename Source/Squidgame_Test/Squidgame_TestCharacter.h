@@ -101,6 +101,12 @@ public:
 	UPROPERTY(EditAnywhere, Category = "SquidGame")
 	TSubclassOf<class UReadyWidget> readyWidget;
 
+	UPROPERTY(EditAnywhere, Category = "Animation")
+	UAnimMontage* DeadAnimMontage;
+
+	UPROPERTY(EditAnywhere, Category = "Animation")
+	class USoundBase* GunFiredSound;
+
 private:
 	class UReadyWidget* readyUI;
 	enum ENetRole localRole;
@@ -108,6 +114,8 @@ private:
 
 	FVector currentPos, originPos;
 	FRotator currentRot, originRot;
+	
+	bool bDetecting = true;
 
 };
 
