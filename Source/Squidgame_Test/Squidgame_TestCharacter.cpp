@@ -19,6 +19,7 @@
 #include "PlayerState/NetRacePlayerState.h"
 #include "GameFramework/PlayerState.h"
 #include "Kismet/GameplayStatics.h"
+#include "Widget/InGameWidget.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -84,6 +85,13 @@ void ASquidgame_TestCharacter::BeginPlay()
 		readyUI = CreateWidget<UReadyWidget>(GetWorld(), readyWidget);
 		if (readyUI != nullptr) {
 			readyUI->AddToViewport();
+		}
+	}
+	if (InGameWidget != nullptr && GetController() && GetController()->IsLocalPlayerController()) {
+		InGameUI = CreateWidget<UInGameWidget>(GetWorld(), InGameWidget);
+		if (InGameUI != nullptr) {
+			InGameUI->AddToViewport();
+			InGameUI->UnShowButton();
 		}
 	}
 }
@@ -269,4 +277,14 @@ void ASquidgame_TestCharacter::Dead()
 
 		UGameplayStatics::PlaySoundAtLocation(this, GunFiredSound, GetActorLocation(), 1);
 	}
+}
+
+
+void ASquidgame_TestCharacter::PrintInfoLog()
+{
+	FString gameModeString = GetWorld()->GetAuthGameMode() != nullptr ? *FString("Valid") : *FString("InValid");
+	FString gameStateString = GetWorld()->GetGameState() != nullptr ? *FString("Valid") : *FString("InValid");
+	FString playerStateString = GetPlayerState() != nullptr ? *FString("Valid") : *FString("InValid");
+	FString printString = FString::Printf(TEXT("GameMode: %s \nGameState: %s\nPlayerState: %s\n"), *gameModeString, *gameStateString, *playerStateString);
+	DrawDebugString(GetWorld(), GetActorLocation(), printString, nullptr, FColor::White, 0, true, 1.0f);
 }

@@ -117,5 +117,12 @@ private:
 	
 	bool bDetecting = true;
 
+public:
+	UPROPERTY(EditAnywhere, Category = "Squid")
+	TSubclassOf<class UInGameWidget> InGameWidget;
+
+	void PrintInfoLog();
+private:
+	class UInGameWidget* InGameUI;
 };
 
