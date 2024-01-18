@@ -38,7 +38,14 @@ public:
 	void FindSession();
 	void JoinSession(int32 roomNumber);
 
+	void SetSessionName(FString name);
+
 	TSharedPtr<FOnlineSessionSearch> sessionSearch;
+	FORCEINLINE FString GetSessionName() const
+	{
+		return mySessionName.ToString();
+	}
+	void ExitSession();
 private:
 	FName mySessionName = FName("Squid Session");
 
@@ -47,4 +54,6 @@ private:
 	void OnFoundSessions(bool bWasSuccessful);
 
 	void OnJoinedCompleted(FName sessionName, EOnJoinSessionCompleteResult::Type result);
+
+	void OnDestroyedSession(FName sessionName, bool bWasSuccessful);
 };

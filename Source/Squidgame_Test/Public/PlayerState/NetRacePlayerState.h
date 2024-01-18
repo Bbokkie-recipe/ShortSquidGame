@@ -13,6 +13,8 @@ UCLASS()
 class SQUIDGAME_TEST_API ANetRacePlayerState : public APlayerState
 {
 	GENERATED_BODY()
+protected:
+	virtual void BeginPlay() override;
 public:
 	ANetRacePlayerState();
 	UFUNCTION(BlueprintCallable, Category = "SquidGame")
@@ -75,5 +77,8 @@ public:
 	virtual void GetLifetimeReplicatedProps(TArray< FLifetimeProperty >& OutLifetimeProps) const override;
 public:
 	UFUNCTION(Server, Unreliable) 
-		void ServerReadyGame();
+	void ServerReadyGame();
+
+	UFUNCTION(Server, Reliable)
+	void ServerSetMyName(const FString& name);
 };
