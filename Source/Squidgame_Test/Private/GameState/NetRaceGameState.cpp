@@ -7,6 +7,32 @@
 #include "Doll/Doll.h"
 #include "Kismet/GameplayStatics.h"
 #include "GameMode/NetRaceGameMode.h"
+#include "GameFramework/PlayerState.h"
+
+TArray<class APlayerState*> ANetRaceGameState::GetMyPlayerList()
+{
+    // 이름순 정렬
+    PlayerArray.Sort(ANetRaceGameState::AscendingByString);
+    // 점수순 정렬
+    PlayerArray.Sort([](const APlayerState& ps1, const APlayerState& ps2) {
+        return ps1.GetScore() >= ps2.GetScore();
+        });
+
+    return PlayerArray;
+}
+
+// 오름차순
+bool ANetRaceGameState::AscendingByString(const APlayerState& ps1, const APlayerState& ps2)
+{
+    return ps1.GetPlayerName() < ps2.GetPlayerName();
+}
+
+// 내림차순
+bool ANetRaceGameState::DescendingByString(const APlayerState& ps1, const APlayerState& ps2)
+{
+    return ps1.GetPlayerName() > ps2.GetPlayerName();
+}
+
 ANetRaceGameState::ANetRaceGameState()
 {
     int32 PlayerCount = PlayerArray.Num();

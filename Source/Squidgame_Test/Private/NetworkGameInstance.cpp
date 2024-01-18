@@ -16,6 +16,7 @@ void UNetworkGameInstance::Init()
 	{
 		sessionInterface->OnCreateSessionCompleteDelegates.AddUObject(this, &UNetworkGameInstance::OnCreatedSession);
 		sessionInterface->OnFindSessionsCompleteDelegates.AddUObject(this, &UNetworkGameInstance::OnFoundSessions);
+		sessionInterface->OnDestroySessionCompleteDelegates.AddUObject(this, &UNetworkGameInstance::OnDestroyedSession);
 	}
 	
 	sessionInterface->OnJoinSessionCompleteDelegates.AddUObject(this, &UNetworkGameInstance::OnJoinedCompleted);
@@ -142,4 +143,21 @@ void UNetworkGameInstance::OnCreatedSession(FName sessionName, bool bWasSuccessf
 	// 멀티 플레이를 할 맵으로 이동한다.
 	// 호스트가 자기가 레벨 파일을 가지고 있다(따라서 이동하고자 하는 레벨 파일의 경로를 써준다.
 	GetWorld()->ServerTravel("/Game/Map/PlayMap?Listen", true);
+}
+
+void UNetworkGameInstance::ExitSession()
+{
+	sessionInterface->DestroySession(mySessionName);
+}
+
+void UNetworkGameInstance::OnDestroyedSession(FName sessionName, bool bWasSuccessful)
+{
+	UE_LOG(LogTemp, Warning, TEXT("Destroy Session: %s"), bWasSuccessful == true ? *FString("Success!") : *FString("Faiiled..."));
+
+	if (bWasSuccessful) {
+		APlayerController* pc = GetWorld()->GetFirstPlayerController();
+		if (pc != nullptr) {
+			pc->ClientTravel(FString("/Game/Maps/Lobby"), ETravelType::TRAVEL_Absolute);
+		}
+	}
 }

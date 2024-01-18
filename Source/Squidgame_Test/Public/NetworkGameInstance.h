@@ -45,6 +45,7 @@ public:
 	{
 		return mySessionName.ToString();
 	}
+	void ExitSession();
 private:
 	FName mySessionName = FName("Squid Session");
 
@@ -53,4 +54,6 @@ private:
 	void OnFoundSessions(bool bWasSuccessful);
 
 	void OnJoinedCompleted(FName sessionName, EOnJoinSessionCompleteResult::Type result);
+
+	void OnDestroyedSession(FName sessionName, bool bWasSuccessful);
 };
