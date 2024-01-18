@@ -60,6 +60,7 @@ void UReadyWidget::OnClickedReadyButton()
 					if (isReadyComplete)
 					{   // À§Á¬ Á¦°Å
 						RemoveFromParent();
+						GameState->StartGame();
 					}
 					else {
 						ShowNotifyNotReady();
