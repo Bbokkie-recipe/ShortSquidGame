@@ -46,6 +46,10 @@ public:
 	class UButton* btn_findSessions;
 	UPROPERTY(EditAnywhere, Category = "My")
 	TSubclassOf<class USessionSlotWidget> slotWidget;
+	UPROPERTY(VisibleAnywhere, Meta = (BindWidget), Category = "MySettings")
+	class UEditableText* editText_UserName;
+	UPROPERTY(VisibleAnywhere, Meta = (BindWidget), Category = "MySettings")
+	class UButton* btn_next;
 private:
 
 	UFUNCTION()
@@ -74,4 +78,7 @@ private:
 
 	UFUNCTION()
 	void FindButtonOnOff(bool on);
+
+	UFUNCTION()
+	void SetUserNameAndNext();
 };

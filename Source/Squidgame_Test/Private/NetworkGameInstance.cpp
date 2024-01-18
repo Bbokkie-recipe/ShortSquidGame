@@ -21,6 +21,10 @@ void UNetworkGameInstance::Init()
 	sessionInterface->OnJoinSessionCompleteDelegates.AddUObject(this, &UNetworkGameInstance::OnJoinedCompleted);
 }
 
+void UNetworkGameInstance::SetSessionName(FString name)
+{
+	mySessionName = FName(*name);
+}
 
 void UNetworkGameInstance::FindSession()
 {

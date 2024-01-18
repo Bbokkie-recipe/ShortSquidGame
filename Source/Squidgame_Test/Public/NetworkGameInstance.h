@@ -38,7 +38,13 @@ public:
 	void FindSession();
 	void JoinSession(int32 roomNumber);
 
+	void SetSessionName(FString name);
+
 	TSharedPtr<FOnlineSessionSearch> sessionSearch;
+	FORCEINLINE FString GetSessionName() const
+	{
+		return mySessionName.ToString();
+	}
 private:
 	FName mySessionName = FName("Squid Session");
 

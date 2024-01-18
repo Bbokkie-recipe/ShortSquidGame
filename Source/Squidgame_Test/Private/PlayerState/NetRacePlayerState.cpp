@@ -3,6 +3,25 @@
 
 #include "PlayerState/NetRacePlayerState.h"
 #include "Net/UnrealNetwork.h"
+#include "NetworkGameInstance.h"
+
+void ANetRacePlayerState::BeginPlay()
+{
+	Super::BeginPlay();
+	FString name = GetGameInstance<UNetworkGameInstance>()->GetSessionName();
+
+	UNetworkGameInstance* gi = GetGameInstance<UNetworkGameInstance>();
+
+	if (GetPlayerController() && GetPlayerController()->IsLocalPlayerController() && gi != nullptr) {
+		FString sessionName = GetGameInstance<UNetworkGameInstance>()->GetSessionName();
+		ServerSetMyName(sessionName); 
+	}
+}
+
+void ANetRacePlayerState::ServerSetMyName_Implementation(const FString& name)
+{
+	SetPlayerName(name);
+}
 
 ANetRacePlayerState::ANetRacePlayerState()
 {
