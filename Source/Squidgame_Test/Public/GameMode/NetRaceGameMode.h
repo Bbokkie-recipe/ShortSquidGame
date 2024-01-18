@@ -27,4 +27,5 @@ public:
 	ANetRaceGameMode();
 	UPROPERTY(Replicated)
 	float ReplicatedTime;
+	void StartRaceGame();
 };

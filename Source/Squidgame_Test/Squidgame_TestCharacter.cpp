@@ -16,6 +16,7 @@
 #include "Runtime/Engine/Public/EngineUtils.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Math/Vector.h"
+#include "PlayerState/NetRacePlayerState.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -209,6 +210,8 @@ void ASquidgame_TestCharacter::CheckMovement(bool isDetecting)
 		{
 			if (GEngine)
 				GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Dead"));
+
+			Dead();
 		}
 		else if(subtractVector == FVector(0, 0, 0))
 		{
@@ -236,4 +239,10 @@ void ASquidgame_TestCharacter::StartDetect()
 			CheckMovement(bDetect);
 		}
 	}
+}
+
+void ASquidgame_TestCharacter::Dead()
+{
+	ANetRacePlayerState* const playerState = GetWorld() != NULL ? GetWorld()->GetGameState<ANetRacePlayerState>() : NULL;
+	playerState->isDead = true;
 }
