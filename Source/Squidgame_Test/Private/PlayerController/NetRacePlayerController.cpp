@@ -25,11 +25,9 @@ void ANetRacePlayerController::UpdateCountdown()
     if (CountdownValue <= 0)
     {
         GetWorldTimerManager().ClearTimer(CountdownTimerHandle);
-        CountDownUI->UpdateCountdownText(0);
         if (CountDownUI != nullptr)
         {
-            CountDownUI->RemoveFromParent();
-            CountDownUI = nullptr;
+            CountDownUI->UpdateCountdownText(0);
         }
     }
     else
