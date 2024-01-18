@@ -9,6 +9,14 @@
 /**
  * 
  */
+
+UENUM()
+enum class ESongState : uint8
+{
+	DollSong,
+	SearchTime,
+};
+
 UENUM()
 enum class EGamePlayState : uint8
 {
@@ -36,14 +44,13 @@ public:
 	UPROPERTY(Replicated)
 	int32 GameEndTime;
 	UPROPERTY(Replicated)
-	EGamePlayState GameState;
+	EGamePlayState SquidGameState;
+	ESongState SongState;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Squid_Game")
 	float TimeLimitInSeconds;
 
 	bool ReadyPlay();
-protected:
-	virtual void DefaultTimer() override;
 
 protected:
 	UPROPERTY()
@@ -53,6 +60,6 @@ public:
 	void StartGame();
 	void EndGame();
 	int32 GetElapsedGameTime() const;
-
+	FString GetGameStateAsString();
 	virtual void GetLifetimeReplicatedProps(TArray< FLifetimeProperty >& OutLifetimeProps) const override;
 };

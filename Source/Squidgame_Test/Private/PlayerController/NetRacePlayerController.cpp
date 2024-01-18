@@ -3,6 +3,10 @@
 
 #include "PlayerController/NetRacePlayerController.h"
 #include "Widget/CountDownWidget.h"
+#include "GameMode/NetRaceGameMode.h"
+#include "GameState/NetRaceGameState.h"
+#include "PlayerState/NetRacePlayerState.h"
+
 ANetRacePlayerController::ANetRacePlayerController()
 {
 }
@@ -21,6 +25,7 @@ void ANetRacePlayerController::StartCountdown()
 
 void ANetRacePlayerController::UpdateCountdown()
 {
+    //ShowStateLog();
     CountdownValue--;
     if (CountdownValue <= 0)
     {
@@ -56,4 +61,15 @@ void ANetRacePlayerController::MulticastCountdown_Implementation()
     CountdownValue = 180;
     GetWorldTimerManager().SetTimer(CountdownTimerHandle, this, &ANetRacePlayerController::UpdateCountdown, 1.0f, true);
     //UE_LOG(LogTemp, Warning, TEXT("Multicast MulticastCountdown_Implementation!")); // Å¬¶ó¸¸
+}
+
+void ANetRacePlayerController::ShowStateLog()
+{
+    ANetRaceGameMode* MyGameMode = Cast<ANetRaceGameMode>(GetWorld()->GetAuthGameMode());
+    ANetRaceGameState* MyGameState = Cast<ANetRaceGameState>(MyGameMode->GameState);
+    if (MyGameMode && MyGameState)
+    {
+        FString GameStateString = MyGameState->GetGameStateAsString();
+        UE_LOG(LogTemp, Warning, TEXT("ShowStateLog GameState: %s\n"), *GameStateString);
+    }
 }

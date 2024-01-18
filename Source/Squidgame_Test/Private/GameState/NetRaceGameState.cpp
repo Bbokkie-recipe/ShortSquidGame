@@ -40,14 +40,14 @@ ANetRaceGameState::ANetRaceGameState()
 	GameEndTime = 0;
 
 	TimeLimitInSeconds = 180.0f; // 3min
-	GameState = EGamePlayState::WaitingToStart;
+    SquidGameState = EGamePlayState::WaitingToStart;
 
 	bReplicates = true;
 }
 
 void ANetRaceGameState::StartGame()
 {
-    GameState = EGamePlayState::InProgress;
+    SquidGameState = EGamePlayState::InProgress;
     FString LogMessage = FString::Printf(TEXT("VariableName: %d"), PlayerArray.Num());
     FColor MessageColor = FColor::Green;
     float DisplayTime = 5.0f;
@@ -56,7 +56,8 @@ void ANetRaceGameState::StartGame()
 
 void ANetRaceGameState::EndGame()
 {
-    GameState = EGamePlayState::GameOver;
+    UE_LOG(LogTemp, Warning, TEXT("EndGame EndGame EndGame????\n"));
+    SquidGameState = EGamePlayState::GameOver;
 }
 
 int32 ANetRaceGameState::GetElapsedGameTime() const
@@ -68,21 +69,6 @@ int32 ANetRaceGameState::GetElapsedGameTime() const
     ElapsedTime = FMath::Max(0, ElapsedTime);
     */
     return ElapsedTime;
-}
-
-void ANetRaceGameState::DefaultTimer()
-{
-    Super::DefaultTimer();
-
-    if (IsMatchInProgress())
-    {
-        ++ElapsedTime;
-
-        if (IsGameOverCondition())
-        {
-            EndGame();
-        }
-    }
 }
 
 bool ANetRaceGameState::IsGameOverCondition() const
@@ -118,7 +104,7 @@ bool ANetRaceGameState::IsGameOverCondition() const
 void ANetRaceGameState::GetLifetimeReplicatedProps(TArray< FLifetimeProperty >& OutLifetimeProps) const
 {
     Super::GetLifetimeReplicatedProps(OutLifetimeProps);
-    DOREPLIFETIME(ANetRaceGameState, GameState);
+    DOREPLIFETIME(ANetRaceGameState, SquidGameState);
 	DOREPLIFETIME(ANetRaceGameState, GameStartTime);
     DOREPLIFETIME(ANetRaceGameState, GameEndTime);
 }
@@ -170,4 +156,12 @@ void ANetRaceGameState::SearchDoll()
     if (HasAuthority()) {
         FoundDoll = Cast<ADoll>(UGameplayStatics::GetActorOfClass(GetWorld(), ADoll::StaticClass()));
     }
+}
+
+FString ANetRaceGameState::GetGameStateAsString()
+{
+    if (SquidGameState == EGamePlayState::WaitingToStart) return FString("WaitingToStart");
+    if (SquidGameState == EGamePlayState::InProgress) return FString("InProgress");
+    if (SquidGameState == EGamePlayState::GameOver) return FString("GameOver");
+    return FString("UnknownGameState");
 }
