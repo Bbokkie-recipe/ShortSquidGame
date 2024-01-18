@@ -3,3 +3,7 @@
 
 #include "SquidAnimInstance.h"
 
+void USquidAnimInstance::PlayDeadAnim(FName SectionName)
+{
+
+}

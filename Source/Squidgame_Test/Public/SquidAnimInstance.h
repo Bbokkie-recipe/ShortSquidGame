@@ -14,4 +14,10 @@ class SQUIDGAME_TEST_API USquidAnimInstance : public UAnimInstance
 {
 	GENERATED_BODY()
 	
+public:
+	UFUNCTION()
+	void PlayDeadAnim(FName SectionName);
+
+	UPROPERTY()
+	bool bDieDone = false;
 };
