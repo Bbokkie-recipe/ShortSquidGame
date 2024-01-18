@@ -78,6 +78,8 @@ protected:
 	void CheckMovement(bool isDetecting);
 
 	void StartDetect();
+
+	void Dead();
 			
 
 protected:
