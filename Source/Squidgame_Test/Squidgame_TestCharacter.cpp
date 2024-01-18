@@ -16,7 +16,7 @@
 #include "Runtime/Engine/Public/EngineUtils.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Math/Vector.h"
-
+#include "Widget/InGameWidget.h"
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
 //////////////////////////////////////////////////////////////////////////
@@ -66,7 +66,6 @@ void ASquidgame_TestCharacter::BeginPlay()
 {
 	// Call the base class  
 	Super::BeginPlay();
-
 	//Add Input Mapping Context
 	if (APlayerController* PlayerController = Cast<APlayerController>(Controller))
 	{
@@ -83,12 +82,19 @@ void ASquidgame_TestCharacter::BeginPlay()
 			readyUI->AddToViewport();
 		}
 	}
+	if (InGameWidget != nullptr && GetController() && GetController()->IsLocalPlayerController()) {
+		InGameUI = CreateWidget<UInGameWidget>(GetWorld(), InGameWidget);
+		if (InGameUI != nullptr) {
+			InGameUI->AddToViewport();
+			InGameUI->UnShowButton();
+		}
+	}
 }
 
 void ASquidgame_TestCharacter::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
-	
+	//PrintInfoLog();
 	if (!runReady)
 	{
 		RunCooltimeTimer(DeltaSeconds);
@@ -236,4 +242,15 @@ void ASquidgame_TestCharacter::StartDetect()
 			CheckMovement(bDetect);
 		}
 	}
+}
+
+void ASquidgame_TestCharacter::PrintInfoLog()
+{
+	FString gameModeString = GetWorld()->GetAuthGameMode() != nullptr ? *FString("Valid") : *FString("InValid"); 
+	FString gameStateString = GetWorld()->GetGameState() != nullptr ? *FString("Valid") : *FString("InValid");
+	FString playerStateString = GetPlayerState() != nullptr ? *FString("Valid") : *FString("InValid");
+	AHUD* hud = GetController<APlayerController>() != nullptr ? GetController<APlayerController>()->GetHUD() : nullptr;
+	FString HUDString = hud != nullptr ? *FString("Valid") : *FString("InValid");
+	FString printString = FString::Printf(TEXT("GameMode: %s \nGameState: %s\nPlayerState: %s\nHUD: %s"), *gameModeString, *gameStateString, *playerStateString, *HUDString);
+	DrawDebugString(GetWorld(), GetActorLocation(), printString, nullptr, FColor::White, 0, true, 1.0f);
 }

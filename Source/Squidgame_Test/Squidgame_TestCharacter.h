@@ -98,7 +98,7 @@ public:
 public:
 	UPROPERTY(EditAnywhere, Category = "SquidGame")
 	TSubclassOf<class UReadyWidget> readyWidget;
-
+	void PrintInfoLog();
 private:
 	class UReadyWidget* readyUI;
 	enum ENetRole localRole;
@@ -107,5 +107,10 @@ private:
 	FVector currentPos, originPos;
 	FRotator currentRot, originRot;
 
+public:
+	UPROPERTY(EditAnywhere, Category = "Squid")
+	TSubclassOf<class UInGameWidget> InGameWidget;
+private:
+	class UInGameWidget* InGameUI;
 };
 
