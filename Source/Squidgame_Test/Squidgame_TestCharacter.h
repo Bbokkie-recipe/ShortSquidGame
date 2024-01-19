@@ -82,6 +82,10 @@ protected:
 	void StartDetect();
 
 	void Dead();
+
+	bool IsProgress();
+
+	bool IsPassed();
 			
 
 protected:

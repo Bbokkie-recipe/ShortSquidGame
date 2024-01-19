@@ -98,12 +98,41 @@ void ASquidgame_TestCharacter::BeginPlay()
 
 }
 
+bool ASquidgame_TestCharacter::IsProgress()
+{
+	ANetRaceGameState* myGameState = GetWorld()->GetGameState<ANetRaceGameState>();
+	if (myGameState->SquidGameState == EGamePlayState::InProgress && myGameState != nullptr)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+bool ASquidgame_TestCharacter::IsPassed()
+{
+	if (GetController()->IsLocalController())
+	{
+		ANetRacePlayerState* myPlayerState = GetController()->GetPlayerState<ANetRacePlayerState>();
+
+		if (myPlayerState->GetPassed())
+			return true;
+		else
+			return false;
+	}
+	else
+	{
+		return false;
+	}
+}
+
 void ASquidgame_TestCharacter::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
 	
-	ANetRaceGameState* myGameState = GetWorld()->GetGameState<ANetRaceGameState>();
-	if (myGameState->SquidGameState == EGamePlayState::InProgress && myGameState != nullptr)
+	if (IsProgress() && !IsPassed())
 	{
 		if (bAlive)
 		{
@@ -216,7 +245,6 @@ void ASquidgame_TestCharacter::RunCooltimeTimer(float deltaTime)
 		runTimer = 0;
 	}
 }
-
 
 
 void ASquidgame_TestCharacter::StartDetect()

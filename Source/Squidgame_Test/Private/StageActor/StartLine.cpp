@@ -9,6 +9,7 @@
 #include "GameState/NetRaceGameState.h"
 #include "PlayerState/NetRacePlayerState.h"
 
+
 // Sets default values
 AStartLine::AStartLine()
 {
@@ -18,14 +19,10 @@ AStartLine::AStartLine()
 	boxComp = CreateDefaultSubobject<UBoxComponent>(TEXT("Start Line Box"));
 	boxComp->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 	boxComp->SetGenerateOverlapEvents(true);
-	boxComp->SetCollisionObjectType(ECC_GameTraceChannel1);
-	boxComp->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap);
+	boxComp->SetCollisionObjectType(ECC_GameTraceChannel2);
+	boxComp->SetCollisionResponseToChannel(ECC_Pawn, ECR_Block);
 	boxComp->SetCollisionResponseToChannel(ECC_WorldStatic, ECR_Block);
 	SetRootComponent(boxComp);
-
-	meshComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh comp"));
-	meshComp->SetupAttachment(RootComponent);
-	meshComp->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
 	bReplicates = true;
 	SetReplicateMovement(true);
@@ -43,9 +40,11 @@ void AStartLine::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	ANetRaceGameState* myGameState = GetWorld()->GetGameState<ANetRaceGameState>();
+	if (myGameState->SquidGameState == EGamePlayState::InProgress && myGameState != nullptr)
+	{
+		boxComp->SetCollisionResponseToChannel(ECC_Pawn, ECR_Ignore);
+	}
 }
 
-void AStartLine::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
-{
-}
 
