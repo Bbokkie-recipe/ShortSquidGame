@@ -41,9 +41,20 @@ ANetRaceGameState::ANetRaceGameState()
 
 	TimeLimitInSeconds = 180.0f; // 3min
     SquidGameState = EGamePlayState::WaitingToStart;
-
+    SongState = ESongState::None;
 	bReplicates = true;
 }
+
+void ANetRaceGameState::SingSong()
+{
+    SongState = ESongState::DollSong;
+}
+
+void ANetRaceGameState::SearchMoving()
+{
+    SongState = ESongState::SearchTime;
+}
+
 
 void ANetRaceGameState::StartGame()
 {

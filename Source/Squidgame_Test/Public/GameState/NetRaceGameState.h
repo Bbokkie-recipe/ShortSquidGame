@@ -13,6 +13,7 @@
 UENUM()
 enum class ESongState : uint8
 {
+	None,
 	DollSong,
 	SearchTime,
 };
@@ -45,12 +46,15 @@ public:
 	int32 GameEndTime;
 	UPROPERTY(Replicated)
 	EGamePlayState SquidGameState;
+	UPROPERTY(Replicated)
 	ESongState SongState;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Squid_Game")
 	float TimeLimitInSeconds;
 
 	bool ReadyPlay();
+	void SingSong();
+	void SearchMoving();
 
 protected:
 	UPROPERTY()
