@@ -105,6 +105,16 @@ bool ANetRacePlayerState::GetisDead()
 	return isDead;
 }
 
+void ANetRacePlayerState::SetPassed()
+{
+	isPassed = true;
+}
+
+bool ANetRacePlayerState::GetPassed()
+{
+	return isPassed;
+}
+
 bool ANetRacePlayerState::GetHasCrossedFinish()
 {
 	return HasCrossedFinishLine;
@@ -119,6 +129,7 @@ void ANetRacePlayerState::GetLifetimeReplicatedProps(TArray< FLifetimeProperty >
 	DOREPLIFETIME(ANetRacePlayerState, DeathTime);
 	DOREPLIFETIME(ANetRacePlayerState, Rank);
 	DOREPLIFETIME(ANetRacePlayerState, bIsReady);
+	DOREPLIFETIME(ANetRacePlayerState, isPassed);
 }
 
 void ANetRacePlayerState::ServerReadyGame_Implementation()
