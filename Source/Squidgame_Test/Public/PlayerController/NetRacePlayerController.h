@@ -16,6 +16,8 @@ class SQUIDGAME_TEST_API ANetRacePlayerController : public APlayerController
 public:
 	ANetRacePlayerController();
 	virtual void BeginPlay() override;
+	virtual void Tick(float DeltaTime) override;
+
 public:
 	UPROPERTY(EditAnywhere, Category = "Squid")
 	TSubclassOf<class UCountDownWidget> CountDownWidget;
