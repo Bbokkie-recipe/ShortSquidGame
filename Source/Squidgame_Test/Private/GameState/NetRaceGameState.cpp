@@ -171,8 +171,12 @@ void ANetRaceGameState::SearchDoll()
 
 FString ANetRaceGameState::GetGameStateAsString()
 {
-    if (SquidGameState == EGamePlayState::WaitingToStart) return FString("WaitingToStart");
-    if (SquidGameState == EGamePlayState::InProgress) return FString("InProgress");
-    if (SquidGameState == EGamePlayState::GameOver) return FString("GameOver");
+    FString nowGS = "";
+    if (SongState == ESongState::DollSong) nowGS.Append("DollSong");
+    if (SongState == ESongState::None) nowGS.Append("DollNone");
+    if (SongState == ESongState::SearchTime) nowGS.Append("DollSearch");
+    if (SquidGameState == EGamePlayState::WaitingToStart) return FString(nowGS.Append("WaitingToStart"));
+    if (SquidGameState == EGamePlayState::InProgress) return FString(nowGS.Append("InProgress"));
+    if (SquidGameState == EGamePlayState::GameOver) return FString(nowGS.Append("GameOver"));
     return FString("UnknownGameState");
 }
