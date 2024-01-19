@@ -71,6 +71,18 @@ void ANetRaceGameState::EndGame()
     SquidGameState = EGamePlayState::GameOver;
 }
 
+void ANetRaceGameState::DoolSongState()
+{
+    UE_LOG(LogTemp, Warning, TEXT("DoolSongState\n"));
+    SongState = ESongState::DollSong;
+}
+
+void ANetRaceGameState::DoolSearchState()
+{
+    UE_LOG(LogTemp, Warning, TEXT("DoolSearchState\n"));
+    SongState = ESongState::SearchTime;
+}
+
 int32 ANetRaceGameState::GetElapsedGameTime() const
 {
     /*
@@ -116,6 +128,7 @@ void ANetRaceGameState::GetLifetimeReplicatedProps(TArray< FLifetimeProperty >& 
 {
     Super::GetLifetimeReplicatedProps(OutLifetimeProps);
     DOREPLIFETIME(ANetRaceGameState, SquidGameState);
+    DOREPLIFETIME(ANetRaceGameState, SongState);
 	DOREPLIFETIME(ANetRaceGameState, GameStartTime);
     DOREPLIFETIME(ANetRaceGameState, GameEndTime);
 }

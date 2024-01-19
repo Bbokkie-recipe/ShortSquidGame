@@ -96,6 +96,13 @@ void ADoll::StartDoolAudio()
 {
 	if (DoolAudio)
 	{
+		if (GetLocalRole() == ENetRole::ROLE_Authority) {
+			ANetRaceGameState* GameState = GetWorld()->GetGameState<ANetRaceGameState>();
+			if (GameState)
+			{
+				GameState->DoolSongState();
+			}
+		}
 		DoolAudio->Play();
 		float SongALength = DoolAudio->Sound->GetDuration();
 
@@ -114,6 +121,13 @@ void ADoll::StartSearchAudio()
 	UE_LOG(LogTemp, Warning, TEXT("StartSearchAudio"));
 	if (SearchAudio)
 	{
+		if (GetLocalRole() == ENetRole::ROLE_Authority) {
+			ANetRaceGameState* GameState = GetWorld()->GetGameState<ANetRaceGameState>();
+			if (GameState)
+			{
+				GameState->DoolSearchState();
+			}
+		}
 		SearchAudio->Play();
 		float SongBLength = SearchAudio->Sound->GetDuration();
 
