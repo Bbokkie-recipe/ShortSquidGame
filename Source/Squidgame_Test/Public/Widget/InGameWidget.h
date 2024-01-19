@@ -24,7 +24,7 @@ public:
 
 	void ShowButtons();
 	void UnShowButton();
-	void AddPlayerList(FString playerName, float score);
+	void AddPlayerList(FString playerName, float score, FString curState);
 private:
 	class ASquidgame_TestCharacter* player;
 	FString playerList;

@@ -10,7 +10,7 @@
 #include "GameState/NetRaceGameState.h"
 #include "GameFramework/PlayerState.h"
 #include "GameState/NetRaceGameState.h"
-
+#include "PlayerState/NetRacePlayerState.h"
 void UInGameWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
@@ -29,7 +29,21 @@ void UInGameWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
 			TArray<APlayerState*> players = NetGameState->GetMyPlayerList();
 			playerList = "";
 			for (APlayerState* p : players) {
-				AddPlayerList(p->GetPlayerName(), p->GetScore());
+				ANetRacePlayerState* PlayerState = Cast<ANetRacePlayerState>(p);
+				FString curState = "";
+				if (NetGameState->SquidGameState == EGamePlayState::WaitingToStart) {
+					curState = "Waiting To Start";
+				}
+				else if (PlayerState->GetPassed()) {
+					curState = "Success";
+				}
+				else if(PlayerState->isDead) {
+					curState = "Game Over";
+				}
+				else {
+					curState = "Playing";
+				}
+				AddPlayerList(p->GetPlayerName(), p->GetScore(), curState);
 			}
 		}
 		//TArray<APlayerState*> players = GetWorld()->GetGameState<ANetGameStateBase>()->GetMyPlayerList();
@@ -46,9 +60,9 @@ void UInGameWidget::UnShowButton()
 	btn_exitSession->SetVisibility(ESlateVisibility::Hidden);
 }
 
-void UInGameWidget::AddPlayerList(FString playerName, float score)
+void UInGameWidget::AddPlayerList(FString playerName, float score, FString curState)
 {
-	playerList.Append(FString::Printf(TEXT("%s %d\n"), *playerName, (int32)score));
+	playerList.Append(FString::Printf(TEXT("%s %d %s\n"), *playerName, (int32)score, *curState));
 	text_PlayerList->SetText(FText::FromString(playerList));
 }
 

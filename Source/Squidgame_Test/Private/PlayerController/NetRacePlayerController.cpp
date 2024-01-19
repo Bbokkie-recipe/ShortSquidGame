@@ -26,7 +26,7 @@ void ANetRacePlayerController::Tick(float DeltaTime)
     }
     else {
         //ShowStateLog();
-    }
+   }
 }
 void ANetRacePlayerController::StartCountdown()
 {
@@ -102,6 +102,6 @@ void ANetRacePlayerController::ShowStateLog()
     if (MyGameState)
     {
         FString GameStateString = MyGameState->GetGameStateAsString();
-        UE_LOG(LogTemp, Warning, TEXT("ShowStateLog GameState: %s\n"), *GameStateString);
+        UE_LOG(LogTemp, Warning, TEXT("ShowStateLog GameState: %s \n"), *GameStateString);
     }
 }

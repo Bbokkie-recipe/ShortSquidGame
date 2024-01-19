@@ -6,6 +6,8 @@
 #include "Components/StaticMeshComponent.h"
 #include "Net/UnrealNetwork.h"
 #include "../Squidgame_TestCharacter.h"
+#include "GameState/NetRaceGameState.h"
+#include "PlayerState/NetRacePlayerState.h"
 // Sets default values
 AFinalLine::AFinalLine()
 {
@@ -45,12 +47,13 @@ void AFinalLine::Tick(float DeltaTime)
 void AFinalLine::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	ASquidgame_TestCharacter* player = Cast<ASquidgame_TestCharacter>(OtherActor);
-
-	if (player != nullptr) 
+	ANetRaceGameState* GameState = Cast<ANetRaceGameState>(GetWorld()->GetGameState());
+	if (player != nullptr && GameState && GameState->SquidGameState == EGamePlayState::InProgress)
 	{
 		if (HasAuthority()) 
 		{
-
+			ANetRacePlayerState* PlayerState = player->GetPlayerState<ANetRacePlayerState>();
+			PlayerState->SetPassed();
 		}
 	}
 }

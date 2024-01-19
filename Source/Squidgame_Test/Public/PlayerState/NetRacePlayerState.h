@@ -56,6 +56,9 @@ public:
 	bool isDead = false;
 
 	UPROPERTY(Replicated)
+	bool isPassed = false;
+
+	UPROPERTY(Replicated)
 	bool HasCrossedFinishLine = false;
 
 	UPROPERTY(Replicated)
@@ -72,6 +75,8 @@ public:
 
 public:
 	bool GetisDead();
+	void SetPassed();
+	bool GetPassed();
 	bool GetHasCrossedFinish();
 	void ToggleReadyState();
 	virtual void GetLifetimeReplicatedProps(TArray< FLifetimeProperty >& OutLifetimeProps) const override;
