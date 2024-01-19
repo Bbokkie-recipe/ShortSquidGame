@@ -6,7 +6,8 @@
 #include "GameMode/NetRaceGameMode.h"
 #include "GameState/NetRaceGameState.h"
 #include "PlayerState/NetRacePlayerState.h"
-
+#include "Doll/Doll.h"
+#include "Kismet/GameplayStatics.h"
 ANetRacePlayerController::ANetRacePlayerController()
 {
 }
@@ -14,6 +15,7 @@ ANetRacePlayerController::ANetRacePlayerController()
 void ANetRacePlayerController::BeginPlay()
 {
 	Super::BeginPlay();
+
 }
 
 void ANetRacePlayerController::StartCountdown()
@@ -26,6 +28,9 @@ void ANetRacePlayerController::StartCountdown()
 void ANetRacePlayerController::UpdateCountdown()
 {
     if (HasAuthority()) {
+        ShowStateLog();
+    }
+    else {
         ShowStateLog();
     }
     //ShowStateLog();
@@ -66,11 +71,22 @@ void ANetRacePlayerController::MulticastCountdown_Implementation()
     //UE_LOG(LogTemp, Warning, TEXT("Multicast MulticastCountdown_Implementation!")); // Å¬¶ó¸¸
 }
 
-void ANetRacePlayerController::ShowStateLog()
+
+void ANetRacePlayerController::ShowStateLog_forServer()
 {
     ANetRaceGameMode* MyGameMode = Cast<ANetRaceGameMode>(GetWorld()->GetAuthGameMode());
     ANetRaceGameState* MyGameState = Cast<ANetRaceGameState>(MyGameMode->GameState);
     if (MyGameMode && MyGameState)
+    {
+        FString GameStateString = MyGameState->GetGameStateAsString();
+        UE_LOG(LogTemp, Warning, TEXT("ShowStateLog GameState: %s\n"), *GameStateString);
+    }
+}
+
+void ANetRacePlayerController::ShowStateLog()
+{
+    ANetRaceGameState* MyGameState = Cast<ANetRaceGameState>(GetWorld()->GetGameState());
+    if (MyGameState)
     {
         FString GameStateString = MyGameState->GetGameStateAsString();
         UE_LOG(LogTemp, Warning, TEXT("ShowStateLog GameState: %s\n"), *GameStateString);

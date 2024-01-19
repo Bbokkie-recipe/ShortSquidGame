@@ -30,5 +30,6 @@ public:
 	class UCountDownWidget* CountDownUI;
 	FTimerHandle CountdownTimerHandle;
 	int32 CountdownValue;
+	void ShowStateLog_forServer();
 	void ShowStateLog();
 };
