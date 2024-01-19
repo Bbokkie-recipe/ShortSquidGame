@@ -29,29 +29,46 @@ ADoll::ADoll()
 	DoolAudio = CreateDefaultSubobject<UAudioComponent>(TEXT("DoolAudio"));
 	SearchAudio = CreateDefaultSubobject<UAudioComponent>(TEXT("SearchAudio"));
 	
+
 }
 
 // Called when the game starts or when spawned
 void ADoll::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	SongALength = DoolAudio->Sound->GetDuration();
+	SongBLength = SearchAudio->Sound->GetDuration();
+
+	switchCooltime = SongBLength;
+	detectCooltime = SongALength;
 }
 
 // Called every frame
 void ADoll::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	
+	ANetRaceGameState* myGameState = GetWorld()->GetGameState<ANetRaceGameState>();
 
-	if (!isDetecting)
+	if (myGameState->SquidGameState == EGamePlayState::InProgress && myGameState != nullptr)
 	{
-		SwitchTimer(DeltaTime);
-	}
-	else if (isDetecting)
-	{
-		DetectingMode(DeltaTime);
+		/*if (GEngine)
+			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("InProgress in doll is working"));*/
+		startTimer = true;
 	}
 
+	if (startTimer)
+	{
+		if (!isDetecting)
+		{
+			SwitchTimer(DeltaTime);
+		}
+		else if (isDetecting)
+		{
+			DetectingMode(DeltaTime);
+		}
+	}
 }
 
 void ADoll::SwitchTimer(float deltaTime)
@@ -59,13 +76,12 @@ void ADoll::SwitchTimer(float deltaTime)
 	if (switchTimerTime < switchCooltime)
 	{
 		switchTimerTime += deltaTime;
+		
 	}
 	else
 	{
 		switchTimerTime = 0.f;
 		isDetecting = true;
-		if (GEngine)
-			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("DetectMode!"));
 	}
 }
 
@@ -82,13 +98,13 @@ void ADoll::DetectingMode(float deltaTime)
 	if (detectTimerTime < detectCooltime)
 	{
 		detectTimerTime += deltaTime;
+
+		//draw debug line 
 	}
 	else
 	{
 		detectTimerTime = 0.f;
 		isDetecting = false;
-		if (GEngine)
-			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Waiting.."));
 	}
 }
 
@@ -97,7 +113,7 @@ void ADoll::StartDoolAudio()
 	if (DoolAudio)
 	{
 		DoolAudio->Play();
-		float SongALength = DoolAudio->Sound->GetDuration();
+		
 
 		GetWorldTimerManager().SetTimer(
 			SongTimerHandle,
@@ -115,7 +131,7 @@ void ADoll::StartSearchAudio()
 	if (SearchAudio)
 	{
 		SearchAudio->Play();
-		float SongBLength = SearchAudio->Sound->GetDuration();
+		
 
 		GetWorldTimerManager().SetTimer(
 			SongTimerHandle,

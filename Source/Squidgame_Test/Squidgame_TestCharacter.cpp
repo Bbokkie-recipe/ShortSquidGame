@@ -20,6 +20,7 @@
 #include "GameFramework/PlayerState.h"
 #include "Kismet/GameplayStatics.h"
 #include "Widget/InGameWidget.h"
+#include "GameState/NetRaceGameState.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -94,21 +95,27 @@ void ASquidgame_TestCharacter::BeginPlay()
 			InGameUI->UnShowButton();
 		}
 	}
+
 }
 
 void ASquidgame_TestCharacter::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
 	
+	ANetRaceGameState* myGameState = GetWorld()->GetGameState<ANetRaceGameState>();
+	if (myGameState->SquidGameState == EGamePlayState::InProgress && myGameState != nullptr)
+	{
+		if (bAlive)
+		{
+			StartDetect();
+		}
+	}
+
 	if (!runReady)
 	{
 		RunCooltimeTimer(DeltaSeconds);
 	}
 
-	if (bDetecting)
-	{
-		StartDetect();
-	}
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -210,6 +217,23 @@ void ASquidgame_TestCharacter::RunCooltimeTimer(float deltaTime)
 	}
 }
 
+
+
+void ASquidgame_TestCharacter::StartDetect()
+{
+	for (TActorIterator<ADoll>_doll(GetWorld()); _doll; ++_doll)
+	{
+		if (_doll)
+		{
+			/*if (GEngine)
+				GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("dollActor is working"));*/
+			
+			bDetecting = _doll->isDetecting;
+			CheckMovement(bDetecting);
+		}
+	}
+}
+
 void ASquidgame_TestCharacter::CheckMovement(bool isDetecting)
 {
 	currentPos = GetActorLocation();
@@ -221,16 +245,15 @@ void ASquidgame_TestCharacter::CheckMovement(bool isDetecting)
 
 		if (subtractVector != FVector(0, 0, 0))
 		{
-
-			if (GEngine)
-				GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Dead"));
+			/*if (GEngine)
+				GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Dead"));*/
 
 			Dead();
 		}
-		else if(subtractVector == FVector(0, 0, 0))
+		else if (subtractVector == FVector(0, 0, 0))
 		{
-			if (GEngine)
-				GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Alive"));
+			/*if (GEngine)
+				GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Alive"));*/
 		}
 
 	}
@@ -238,20 +261,6 @@ void ASquidgame_TestCharacter::CheckMovement(bool isDetecting)
 	{
 		originPos = currentPos;
 		originRot = currentRot;
-	}
-}
-
-void ASquidgame_TestCharacter::StartDetect()
-{
-	for (TActorIterator<ADoll>_doll(GetWorld()); _doll; ++_doll)
-	{
-		if (_doll)
-		{
-			/*if (GEngine)
-				GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("dollActor is working"));*/
-			bool bDetect = _doll->isDetecting;
-			CheckMovement(bDetect);
-		}
 	}
 }
 
@@ -266,15 +275,14 @@ void ASquidgame_TestCharacter::Dead()
 			playerState->isDead = true;
 		}
 	}
-	
-	bDetecting = false;
+
+	bAlive = false;
 
 	UAnimInstance* animInstance = GetMesh()->GetAnimInstance();
 	if (animInstance)
 	{
 		animInstance->Montage_Play(DeadAnimMontage);
 		GetController()->SetIgnoreMoveInput(true);
-
 		UGameplayStatics::PlaySoundAtLocation(this, GunFiredSound, GetActorLocation(), 1);
 	}
 }

@@ -31,7 +31,7 @@ public:
 
 	void StartSearchAudio();
 
-	bool isDetecting = false;
+	
 
 private:
 	UPROPERTY(VisibleAnywhere, Category = "Doll")
@@ -53,9 +53,9 @@ private:
 	UAudioComponent* SearchAudio; // 감시 사운드
 
 private:
-	float switchCooltime = 4.f;
+	float switchCooltime;
 
-	float detectCooltime = 3.f;
+	float detectCooltime;
 
 	float switchTimerTime = 0.f;
 
@@ -65,7 +65,18 @@ private:
 
 	float angleAxis;
 
+	bool startTimer = false;
+
+	
+
 protected:
 	FTimerHandle SongTimerHandle;
 
+public:
+
+	bool isDetecting = false;
+
+	float SongALength;
+
+	float SongBLength;
 };
