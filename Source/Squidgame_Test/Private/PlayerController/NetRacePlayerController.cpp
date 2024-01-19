@@ -18,6 +18,16 @@ void ANetRacePlayerController::BeginPlay()
 
 }
 
+void ANetRacePlayerController::Tick(float DeltaTime)
+{
+    Super::Tick(DeltaTime);
+    if (HasAuthority()) {
+        //ShowStateLog();
+    }
+    else {
+        //ShowStateLog();
+    }
+}
 void ANetRacePlayerController::StartCountdown()
 {
     if (HasAuthority()) {
@@ -27,12 +37,6 @@ void ANetRacePlayerController::StartCountdown()
 
 void ANetRacePlayerController::UpdateCountdown()
 {
-    if (HasAuthority()) {
-        ShowStateLog();
-    }
-    else {
-        ShowStateLog();
-    }
     //ShowStateLog();
     CountdownValue--;
     if (CountdownValue <= 0)
@@ -41,6 +45,15 @@ void ANetRacePlayerController::UpdateCountdown()
         if (CountDownUI != nullptr)
         {
             CountDownUI->UpdateCountdownText(0);
+            if (GetLocalRole() == ENetRole::ROLE_Authority) {
+                //ANetRacePlayerState* PlayerState = Cast<ANetRacePlayerState>(this->PlayerState);
+                //PlayerState->SetGasmeEnd();
+                ANetRaceGameState* GameState = GetWorld()->GetGameState<ANetRaceGameState>();
+                if (GameState)
+                {
+                    GameState->EndGame();
+                }
+            }
         }
     }
     else

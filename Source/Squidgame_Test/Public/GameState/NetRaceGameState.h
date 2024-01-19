@@ -63,6 +63,8 @@ public:
 	bool IsGameOverCondition() const;
 	void StartGame();
 	void EndGame();
+	void DoolSongState();
+	void DoolSearchState();
 	int32 GetElapsedGameTime() const;
 	FString GetGameStateAsString();
 	virtual void GetLifetimeReplicatedProps(TArray< FLifetimeProperty >& OutLifetimeProps) const override;
