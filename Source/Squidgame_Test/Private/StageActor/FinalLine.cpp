@@ -8,6 +8,8 @@
 #include "../Squidgame_TestCharacter.h"
 #include "GameState/NetRaceGameState.h"
 #include "PlayerState/NetRacePlayerState.h"
+#include "StageActor/BlockLine.h"
+
 // Sets default values
 AFinalLine::AFinalLine()
 {
@@ -26,6 +28,8 @@ AFinalLine::AFinalLine()
 	meshComp->SetupAttachment(RootComponent);
 	meshComp->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
+	
+
 	bReplicates = true;
 	SetReplicateMovement(true);
 }
@@ -42,6 +46,10 @@ void AFinalLine::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	if (bStartTimer)
+	{
+		ClosedTimer(DeltaTime);
+	}
 }
 
 void AFinalLine::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
@@ -54,7 +62,23 @@ void AFinalLine::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* Oth
 		{
 			ANetRacePlayerState* PlayerState = player->GetPlayerState<ANetRacePlayerState>();
 			PlayerState->SetPassed();
+			bStartTimer = true;
 		}
+	}
+}
+
+void AFinalLine::ClosedTimer(float deltaTime)
+{
+
+	if (closedTimer < closedCooltime)
+	{
+		closedTimer += deltaTime;
+	}
+	else 
+	{
+		closedTimer = 0;
+		bStartTimer = false;
+		boxComp->SetCollisionResponseToChannel(ECC_Pawn, ECR_Block);
 	}
 }
 

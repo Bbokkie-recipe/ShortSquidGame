@@ -38,7 +38,7 @@ void UInGameWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
 					curState = "Success";
 				}
 				else if(PlayerState->isDead) {
-					curState = "Game Over";
+					curState = "Die";
 				}
 				else {
 					curState = "Playing";
@@ -50,7 +50,7 @@ void UInGameWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
 	}
 }
 
-void UInGameWidget::ShowButtons()
+void UInGameWidget::ShowExitButtons()
 {
 	btn_exitSession->SetVisibility(ESlateVisibility::Visible);
 }

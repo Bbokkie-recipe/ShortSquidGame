@@ -61,7 +61,9 @@ public:
 
 	bool runReady = true;
 
+	bool bDetecting = true;
 
+	bool bAlive = true;
 
 protected:
 
@@ -80,6 +82,10 @@ protected:
 	void StartDetect();
 
 	void Dead();
+
+	bool IsProgress();
+
+	bool IsPassed();
 			
 
 protected:
@@ -114,8 +120,6 @@ private:
 
 	FVector currentPos, originPos;
 	FRotator currentRot, originRot;
-	
-	bool bDetecting = true;
 
 public:
 	UPROPERTY(EditAnywhere, Category = "Squid")

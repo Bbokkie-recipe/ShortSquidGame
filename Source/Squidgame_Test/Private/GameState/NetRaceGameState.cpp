@@ -67,7 +67,7 @@ void ANetRaceGameState::StartGame()
 
 void ANetRaceGameState::EndGame()
 {
-    UE_LOG(LogTemp, Warning, TEXT("EndGame EndGame EndGame????\n"));
+    UE_LOG(LogTemp, Warning, TEXT("EndGame\n"));
     SquidGameState = EGamePlayState::GameOver;
 }
 
@@ -182,12 +182,45 @@ void ANetRaceGameState::SearchDoll()
     }
 }
 
+
+bool ANetRaceGameState::EndSquidPlay()
+{
+    bool AllPlayersDone = false;
+    TArray<TObjectPtr<APlayerState>> Players = this->PlayerArray;
+    if (Players.Num() == 1){ // Single Play
+        ANetRacePlayerState* PS = Cast<ANetRacePlayerState>(Players[0]);
+        if (PS) {
+            if (PS->GetPassed() || PS->GetisDead()) {
+                AllPlayersDone = true;
+            }
+        }
+    }
+    else {
+        AllPlayersDone = true; 
+        for (APlayerState* PlayerState : Players) {
+            ANetRacePlayerState* PS = Cast<ANetRacePlayerState>(PlayerState);
+            if (PS) {
+                if (!PS->GetPassed() || !PS->GetisDead()) {
+                    AllPlayersDone = false;
+                    break;
+                }
+            }
+        }
+    }
+    if (SquidGameState == EGamePlayState::GameOver) {
+        return true;
+    }
+    return AllPlayersDone;
+}
+
+
 FString ANetRaceGameState::GetGameStateAsString()
 {
     FString nowGS = "";
     if (SongState == ESongState::DollSong) nowGS.Append("DollSong");
     if (SongState == ESongState::None) nowGS.Append("DollNone");
     if (SongState == ESongState::SearchTime) nowGS.Append("DollSearch");
+    if (EndSquidPlay())nowGS.Append("Squid Game End");
     if (SquidGameState == EGamePlayState::WaitingToStart) return FString(nowGS.Append("WaitingToStart"));
     if (SquidGameState == EGamePlayState::InProgress) return FString(nowGS.Append("InProgress"));
     if (SquidGameState == EGamePlayState::GameOver) return FString(nowGS.Append("GameOver"));
