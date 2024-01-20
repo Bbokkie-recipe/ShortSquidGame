@@ -82,6 +82,12 @@ void ADoll::SwitchTimer(float deltaTime)
 	{
 		switchTimerTime = 0.f;
 		isDetecting = true;
+		ANetRaceGameState* myGameState = GetWorld()->GetGameState<ANetRaceGameState>();
+		if (myGameState)
+		{
+			myGameState->SearchMoving();
+			UE_LOG(LogTemp, Warning, TEXT("Detect time"));
+		}
 	}
 }
 
@@ -105,6 +111,12 @@ void ADoll::DetectingMode(float deltaTime)
 	{
 		detectTimerTime = 0.f;
 		isDetecting = false;
+		ANetRaceGameState* myGameState = GetWorld()->GetGameState<ANetRaceGameState>();
+		if (myGameState)
+		{
+			myGameState->SingSong();
+			UE_LOG(LogTemp, Warning, TEXT("Sing Song"));
+		}
 	}
 }
 
