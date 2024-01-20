@@ -19,12 +19,23 @@ protected:
 public:
 	UPROPERTY(VisibleAnywhere, meta = (BindWidget), Category = "MySet")
 	class UButton* btn_exitSession;
+
 	UPROPERTY(VisibleAnywhere, meta = (BindWidget), Category = "MySet")
 	class UTextBlock* text_PlayerList;
+
+	UPROPERTY(VisibleAnywhere, meta = (BindWidget), Category = "MySet")
+	class UTextBlock* text_SPlayerList;
+
+	UPROPERTY(VisibleAnywhere, meta = (BindWidget), Category = "MySet")
+	class UTextBlock* text_DPlayerList;
+
+	UPROPERTY(VisibleAnywhere, Meta = (BindWidget), Category = "MySettings")
+	class UWidgetSwitcher* widgetSwicher;
 
 	void ShowExitButtons();
 	void UnShowButton();
 	void AddPlayerList(FString playerName, float score, FString curState);
+	void ShowGameResult();
 private:
 	class ASquidgame_TestCharacter* player;
 	FString playerList;

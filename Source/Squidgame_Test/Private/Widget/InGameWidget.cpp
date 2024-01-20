@@ -11,6 +11,8 @@
 #include "GameFramework/PlayerState.h"
 #include "GameState/NetRaceGameState.h"
 #include "PlayerState/NetRacePlayerState.h"
+#include "Components/WidgetSwitcher.h"
+
 void UInGameWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
@@ -69,4 +71,9 @@ void UInGameWidget::AddPlayerList(FString playerName, float score, FString curSt
 void UInGameWidget::OnExitSession()
 {
 	GetGameInstance<UNetworkGameInstance>()->ExitSession();
+}
+
+void UInGameWidget::ShowGameResult()
+{
+	widgetSwicher->SetActiveWidgetIndex(1);
 }
