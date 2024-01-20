@@ -22,7 +22,7 @@ public:
 	UPROPERTY(VisibleAnywhere, meta = (BindWidget), Category = "MySet")
 	class UTextBlock* text_PlayerList;
 
-	void ShowButtons();
+	void ShowExitButtons();
 	void UnShowButton();
 	void AddPlayerList(FString playerName, float score, FString curState);
 private:
