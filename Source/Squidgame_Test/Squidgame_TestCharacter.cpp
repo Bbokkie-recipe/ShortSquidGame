@@ -95,7 +95,6 @@ void ASquidgame_TestCharacter::BeginPlay()
 			InGameUI->UnShowButton();
 		}
 	}
-
 }
 
 bool ASquidgame_TestCharacter::IsProgress()
@@ -132,19 +131,20 @@ void ASquidgame_TestCharacter::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
 	
-	if (IsProgress() && !IsPassed())
-	{
-		if (bAlive)
+	if (HasAuthority()) {
+		if (IsProgress() && !IsPassed())
 		{
-			StartDetect();
+			if (bAlive)
+			{
+				StartDetect();
+			}
+		}
+
+		if (!runReady)
+		{
+			RunCooltimeTimer(DeltaSeconds);
 		}
 	}
-
-	if (!runReady)
-	{
-		RunCooltimeTimer(DeltaSeconds);
-	}
-
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -275,8 +275,10 @@ void ASquidgame_TestCharacter::CheckMovement(bool isDetecting)
 		{
 			/*if (GEngine)
 				GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Dead"));*/
-
-			Dead();
+			ANetRacePlayerState* MyPlayerState = Cast<ANetRacePlayerState>(GetController()->PlayerState);
+			if (MyPlayerState) {
+				Dead();
+			}
 		}
 		else if (subtractVector == FVector(0, 0, 0))
 		{
@@ -292,30 +294,6 @@ void ASquidgame_TestCharacter::CheckMovement(bool isDetecting)
 	}
 }
 
-void ASquidgame_TestCharacter::Dead()
-{
-	APlayerController* myController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
-	if (myController != nullptr)
-	{
-		ANetRacePlayerState* const playerState = myController->GetPlayerState<ANetRacePlayerState>();
-		if (playerState != nullptr)
-		{
-			playerState->isDead = true;
-		}
-	}
-
-	bAlive = false;
-
-	UAnimInstance* animInstance = GetMesh()->GetAnimInstance();
-	if (animInstance)
-	{
-		animInstance->Montage_Play(DeadAnimMontage);
-		GetController()->SetIgnoreMoveInput(true);
-		UGameplayStatics::PlaySoundAtLocation(this, GunFiredSound, GetActorLocation(), 1);
-	}
-}
-
-
 void ASquidgame_TestCharacter::PrintInfoLog()
 {
 	FString gameModeString = GetWorld()->GetAuthGameMode() != nullptr ? *FString("Valid") : *FString("InValid");
@@ -323,4 +301,50 @@ void ASquidgame_TestCharacter::PrintInfoLog()
 	FString playerStateString = GetPlayerState() != nullptr ? *FString("Valid") : *FString("InValid");
 	FString printString = FString::Printf(TEXT("GameMode: %s \nGameState: %s\nPlayerState: %s\n"), *gameModeString, *gameStateString, *playerStateString);
 	DrawDebugString(GetWorld(), GetActorLocation(), printString, nullptr, FColor::White, 0, true, 1.0f);
+}
+
+
+void ASquidgame_TestCharacter::Dead() {
+	AController* MyController = GetController();
+	if (MyController)
+	{
+		ANetRacePlayerState* MyPlayerState = Cast<ANetRacePlayerState>(MyController->PlayerState);
+		if (MyPlayerState) {
+			MyPlayerState->SetisDead();
+			ServerDieProcess();
+		}
+	}
+}
+
+void ASquidgame_TestCharacter::ServerDieProcess_Implementation()
+{
+	MulticastDieProcess();
+	//ForceNetUpdate();
+}
+
+void ASquidgame_TestCharacter::MulticastDieProcess_Implementation()
+{
+	if (!bAlive)
+	{
+		return;
+	}
+
+	bAlive = false;
+
+	class APlayerController* pc = GetController<APlayerController>();
+	if (pc != nullptr && pc->IsLocalPlayerController())
+	{
+		pc->SetIgnoreMoveInput(true);
+		if (InGameUI)
+		{
+			InGameUI->ShowExitButtons();
+		}
+	}
+
+	UAnimInstance* animInstance = GetMesh()->GetAnimInstance();
+	if (animInstance)
+	{
+		animInstance->Montage_Play(DeadAnimMontage);
+		UGameplayStatics::PlaySoundAtLocation(this, GunFiredSound, GetActorLocation(), 1);
+	}
 }
