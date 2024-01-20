@@ -128,5 +128,12 @@ public:
 	void PrintInfoLog();
 private:
 	class UInGameWidget* InGameUI;
+
+public:
+	UFUNCTION(Server, Reliable)
+	void ServerDieProcess();
+
+	UFUNCTION(NetMulticast, Reliable)
+	void MulticastDieProcess();
 };
 
