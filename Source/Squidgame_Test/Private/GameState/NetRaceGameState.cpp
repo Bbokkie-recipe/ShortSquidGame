@@ -195,6 +195,21 @@ bool ANetRaceGameState::EndSquidPlay()
             }
         }
     }
+    else {
+        AllPlayersDone = true; 
+        for (APlayerState* PlayerState : Players) {
+            ANetRacePlayerState* PS = Cast<ANetRacePlayerState>(PlayerState);
+            if (PS) {
+                if (!PS->GetPassed() || !PS->GetisDead()) {
+                    AllPlayersDone = false;
+                    break;
+                }
+            }
+        }
+    }
+    if (SquidGameState == EGamePlayState::GameOver) {
+        return true;
+    }
     return AllPlayersDone;
 }
 
