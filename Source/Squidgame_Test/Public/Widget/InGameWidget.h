@@ -21,6 +21,9 @@ public:
 	class UButton* btn_exitSession;
 
 	UPROPERTY(VisibleAnywhere, meta = (BindWidget), Category = "MySet")
+	class UButton* btn_exitGame;
+
+	UPROPERTY(VisibleAnywhere, meta = (BindWidget), Category = "MySet")
 	class UTextBlock* text_PlayerList;
 
 	UPROPERTY(VisibleAnywhere, meta = (BindWidget), Category = "MySet")
