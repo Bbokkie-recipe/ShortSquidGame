@@ -145,6 +145,15 @@ void ASquidgame_TestCharacter::Tick(float DeltaSeconds)
 			RunCooltimeTimer(DeltaSeconds);
 		}
 	}
+	if (GetLocalRole() == ENetRole::ROLE_Authority) {
+		ANetRaceGameState* GameState = GetWorld()->GetGameState<ANetRaceGameState>();
+		if (GameState)
+		{
+			if (GameState->EndSquidPlay()) {
+				ServerShowResult();
+			}
+		}
+	}
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -347,4 +356,22 @@ void ASquidgame_TestCharacter::MulticastDieProcess_Implementation()
 		animInstance->Montage_Play(DeadAnimMontage);
 		UGameplayStatics::PlaySoundAtLocation(this, GunFiredSound, GetActorLocation(), 1);
 	}
+}
+
+void ASquidgame_TestCharacter::ServerShowResult_Implementation()
+{
+	MulticastShowResult();
+}
+
+void ASquidgame_TestCharacter::MulticastShowResult_Implementation()
+{
+	class APlayerController* pc = GetController<APlayerController>();
+	if (pc != nullptr && pc->IsLocalPlayerController())
+	{
+		if (InGameUI)
+		{
+			InGameUI->ShowGameResult();
+		}
+	}
+
 }

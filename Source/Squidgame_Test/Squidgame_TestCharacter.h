@@ -135,5 +135,11 @@ public:
 
 	UFUNCTION(NetMulticast, Reliable)
 	void MulticastDieProcess();
+
+	UFUNCTION(Server, Reliable)
+	void ServerShowResult();
+
+	UFUNCTION(NetMulticast, Reliable)
+	void MulticastShowResult();
 };
 
