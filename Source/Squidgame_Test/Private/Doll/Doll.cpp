@@ -19,16 +19,12 @@ ADoll::ADoll()
 
 	HeadStaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("HeadStaticMesh"));
 	HeadStaticMesh->SetupAttachment(RootComponent);
-
 	BodyStaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("BodyStaticMesh"));
 	BodyStaticMesh->SetupAttachment(RootComponent);
-
 	BowTieStaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("BowTieStaticMesh"));
 	BowTieStaticMesh->SetupAttachment(RootComponent);
-
 	DoolAudio = CreateDefaultSubobject<UAudioComponent>(TEXT("DoolAudio"));
 	SearchAudio = CreateDefaultSubobject<UAudioComponent>(TEXT("SearchAudio"));
-	
 
 }
 
@@ -87,6 +83,10 @@ void ADoll::SwitchTimer(float deltaTime)
 		{
 			myGameState->SearchMoving();
 			UE_LOG(LogTemp, Warning, TEXT("Detect time"));
+			FVector NewRelativeLocation = HeadStaticMesh->GetRelativeLocation();
+			NewRelativeLocation.Y += 20.f;
+			HeadStaticMesh->SetRelativeLocation(NewRelativeLocation);
+			HeadStaticMesh->SetRelativeRotation(FRotator(0.f, 0.f, 0.f));
 		}
 	}
 }
@@ -116,6 +116,10 @@ void ADoll::DetectingMode(float deltaTime)
 		{
 			myGameState->SingSong();
 			UE_LOG(LogTemp, Warning, TEXT("Sing Song"));
+			FVector NewRelativeLocation = HeadStaticMesh->GetRelativeLocation();
+			NewRelativeLocation.Y = 0.f;
+			HeadStaticMesh->SetRelativeLocation(NewRelativeLocation);
+			HeadStaticMesh->SetRelativeRotation(FRotator(0.f, 180.f, 0.f));
 		}
 	}
 }
