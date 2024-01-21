@@ -80,12 +80,14 @@ void ASquidgame_TestCharacter::BeginPlay()
 			Subsystem->AddMappingContext(DefaultMappingContext, 0);
 		}
 	}
+	APlayerController* PlayerController = Cast<APlayerController>(Controller);
 	localRole = GetLocalRole();
 	remoteRole = GetRemoteRole();
 	if (readyWidget != nullptr && GetController() && GetController()->IsLocalPlayerController()) {
 		readyUI = CreateWidget<UReadyWidget>(GetWorld(), readyWidget);
 		if (readyUI != nullptr) {
 			readyUI->AddToViewport();
+			PlayerController->SetShowMouseCursor(true);
 		}
 	}
 	if (InGameWidget != nullptr && GetController() && GetController()->IsLocalPlayerController()) {
@@ -370,6 +372,7 @@ void ASquidgame_TestCharacter::MulticastShowResult_Implementation()
 	{
 		if (InGameUI)
 		{
+			pc->SetShowMouseCursor(true);
 			InGameUI->ShowGameResult();
 		}
 	}

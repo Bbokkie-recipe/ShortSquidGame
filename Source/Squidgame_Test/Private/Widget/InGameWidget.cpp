@@ -18,6 +18,7 @@ void UInGameWidget::NativeConstruct()
 	Super::NativeConstruct();
 	player = GetOwningPlayerPawn<ASquidgame_TestCharacter>();
 	btn_exitSession->OnClicked.AddDynamic(this, &UInGameWidget::OnExitSession);
+	btn_exitGame->OnClicked.AddDynamic(this, &UInGameWidget::OnExitSession);
 	text_PlayerList->SetText(FText::FromString(TEXT("")));
 }
 
