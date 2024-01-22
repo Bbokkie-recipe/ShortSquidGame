@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "Doll.generated.h"
 
+
 UCLASS()
 class SQUIDGAME_TEST_API ADoll : public AActor
 {
@@ -31,7 +32,6 @@ public:
 
 	void StartSearchAudio();
 
-	
 
 private:
 	UPROPERTY(VisibleAnywhere, Category = "Doll")
@@ -67,7 +67,7 @@ private:
 
 	bool startTimer = false;
 
-	
+	float spareTime;
 
 protected:
 	FTimerHandle SongTimerHandle;
@@ -76,9 +76,12 @@ public:
 
 	bool isDetecting = false;
 
+	UPROPERTY(Replicated)
 	float SongALength;
 
+	UPROPERTY(Replicated)
 	float SongBLength;
 
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 };

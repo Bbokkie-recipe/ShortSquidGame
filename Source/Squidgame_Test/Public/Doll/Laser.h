@@ -32,4 +32,7 @@ private:
 	FVector EndPoint;
 	bool bHasFired;
 	FVector PlayerLocation;
+
+public:
+	void Laser();
 };

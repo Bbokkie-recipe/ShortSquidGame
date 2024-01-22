@@ -25,19 +25,20 @@ ADoll::ADoll()
 	BowTieStaticMesh->SetupAttachment(RootComponent);
 	DoolAudio = CreateDefaultSubobject<UAudioComponent>(TEXT("DoolAudio"));
 	SearchAudio = CreateDefaultSubobject<UAudioComponent>(TEXT("SearchAudio"));
-
+	
+	bReplicates = true;
 }
 
 // Called when the game starts or when spawned
 void ADoll::BeginPlay()
 {
 	Super::BeginPlay();
-
+	
+	spareTime = 0.5f;
 	SongALength = DoolAudio->Sound->GetDuration();
 	SongBLength = SearchAudio->Sound->GetDuration();
-
-	switchCooltime = SongBLength;
-	detectCooltime = SongALength;
+	switchCooltime = SongBLength + spareTime;
+	detectCooltime = SongALength + spareTime;
 }
 
 // Called every frame
@@ -96,13 +97,6 @@ void ADoll::SwitchTimer(float deltaTime)
 
 void ADoll::DetectingMode(float deltaTime)
 {
-	/*angleAxis = deltaTime * multiplier;
-
-	FRotator NewRotation = FRotator(0, angleAxis, 0);
-
-	HeadStaticMesh->SetRelativeRotation(NewRotation);
-	doll 머리 움직이기는 것 구현하기 */
-
 
 	if (detectTimerTime < detectCooltime)
 	{
@@ -187,3 +181,12 @@ void ADoll::StartSearchAudio()
 		);
 	}
 }
+
+void ADoll::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(ADoll, SongALength);
+	DOREPLIFETIME(ADoll, SongBLength);
+}
+

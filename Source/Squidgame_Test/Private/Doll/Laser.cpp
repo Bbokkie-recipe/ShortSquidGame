@@ -7,6 +7,8 @@
 #include "Components/SceneComponent.h"
 #include "GameFramework/PlayerController.h"
 #include "Kismet/GameplayStatics.h"
+#include "Doll/Doll.h"
+#include "GameState/NetRaceGameState.h"
 
 // Sets default values
 ALaser::ALaser()
@@ -28,32 +30,43 @@ ALaser::ALaser()
 void ALaser::BeginPlay()
 {
 	Super::BeginPlay();
-    APlayerController* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
-    LaserParticle->Activate(true);
-    if (PlayerController)
-    {
-        PlayerLocation = PlayerController->GetPawn()->GetActorLocation();
-
-        StartPoint = GetActorLocation();
-        EndPoint = PlayerLocation;
-
-        LaserParticle->SetBeamSourcePoint(0, StartPoint, 0);
-        LaserParticle->SetBeamEndPoint(0, EndPoint);
-
-        LaserParticle->Activate(true);
-    }
+    
 }
 
 void ALaser::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+    Laser();
+}
+
+void ALaser::Laser()
+{
     APlayerController* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+    ANetRaceGameState* myGameState = GetWorld()->GetGameState<ANetRaceGameState>();
 
     if (PlayerController)
     {
-        PlayerLocation = PlayerController->GetPawn()->GetActorLocation();
+        StartPoint = GetActorLocation();
+        EndPoint = PlayerController->GetPawn()->GetActorLocation()+FVector(0,0,30);
+        LaserParticle->SetBeamSourcePoint(0, StartPoint, 0);
+        LaserParticle->SetBeamEndPoint(0, EndPoint);
     }
-    LaserParticle->SetBeamSourcePoint(0, StartPoint, 0);
-    LaserParticle->SetBeamTargetPoint(0, PlayerLocation, 0);
+
+    if (myGameState != nullptr)
+    {
+        if (myGameState->SongState == ESongState::DollSong)
+        {
+            LaserParticle->Activate(true);
+        }
+        else if (myGameState->SongState == ESongState::SearchTime)
+        {
+            LaserParticle->Activate(false);
+        }
+        else
+        {
+            LaserParticle->Activate(true);
+        }
+    }
 }
 
