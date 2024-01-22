@@ -48,6 +48,7 @@ void UReadyWidget::OnClickedReadyButton()
 	// 참가자면
 	if (player != nullptr) {
 		AController* OwningController = player->GetController();
+		APlayerController* PlayerController = Cast<APlayerController>(OwningController);
 		if (OwningController)
 		{
 			if (player->GetLocalRole() == ENetRole::ROLE_Authority) {
@@ -61,6 +62,7 @@ void UReadyWidget::OnClickedReadyButton()
 					{   // 위젯 제거
 						RemoveFromParent();
 						GameState->StartGame();
+						if(PlayerController)PlayerController->SetShowMouseCursor(false);
 					}
 					else {
 						ShowNotifyNotReady();
@@ -71,6 +73,7 @@ void UReadyWidget::OnClickedReadyButton()
 				ANetRacePlayerState* PlayerState = Cast<ANetRacePlayerState>(OwningController->PlayerState);
 				PlayerState->SetReady();
 				readyButton->SetVisibility(ESlateVisibility::Hidden);
+				if (PlayerController)PlayerController->SetShowMouseCursor(false);
 			}
 		}
 	}

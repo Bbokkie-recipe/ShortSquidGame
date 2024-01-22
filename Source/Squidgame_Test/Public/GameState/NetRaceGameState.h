@@ -25,6 +25,7 @@ enum class EGamePlayState : uint8
 	InProgress,
 	GameOver,
 };
+
 UCLASS()
 class SQUIDGAME_TEST_API ANetRaceGameState : public AGameState //GameState는 게임 상태를 저장하고 모든 플레이어에게 동기화
 {
@@ -68,4 +69,5 @@ public:
 	int32 GetElapsedGameTime() const;
 	FString GetGameStateAsString();
 	virtual void GetLifetimeReplicatedProps(TArray< FLifetimeProperty >& OutLifetimeProps) const override;
+	bool EndSquidPlay();
 };

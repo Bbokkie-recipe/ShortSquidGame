@@ -99,6 +99,12 @@ void ANetRacePlayerState::SetReady()
 	ServerReadyGame();
 }
 
+void ANetRacePlayerState::SetisDead()
+{
+	isDead = true;
+}
+
+
 
 bool ANetRacePlayerState::GetisDead()
 {

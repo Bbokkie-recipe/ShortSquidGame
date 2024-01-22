@@ -11,11 +11,14 @@
 #include "GameFramework/PlayerState.h"
 #include "GameState/NetRaceGameState.h"
 #include "PlayerState/NetRacePlayerState.h"
+#include "Components/WidgetSwitcher.h"
+
 void UInGameWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
 	player = GetOwningPlayerPawn<ASquidgame_TestCharacter>();
 	btn_exitSession->OnClicked.AddDynamic(this, &UInGameWidget::OnExitSession);
+	btn_exitGame->OnClicked.AddDynamic(this, &UInGameWidget::OnExitSession);
 	text_PlayerList->SetText(FText::FromString(TEXT("")));
 }
 
@@ -38,7 +41,7 @@ void UInGameWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
 					curState = "Success";
 				}
 				else if(PlayerState->isDead) {
-					curState = "Game Over";
+					curState = "Die";
 				}
 				else {
 					curState = "Playing";
@@ -50,7 +53,7 @@ void UInGameWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
 	}
 }
 
-void UInGameWidget::ShowButtons()
+void UInGameWidget::ShowExitButtons()
 {
 	btn_exitSession->SetVisibility(ESlateVisibility::Visible);
 }
@@ -69,4 +72,9 @@ void UInGameWidget::AddPlayerList(FString playerName, float score, FString curSt
 void UInGameWidget::OnExitSession()
 {
 	GetGameInstance<UNetworkGameInstance>()->ExitSession();
+}
+
+void UInGameWidget::ShowGameResult()
+{
+	widgetSwicher->SetActiveWidgetIndex(1);
 }

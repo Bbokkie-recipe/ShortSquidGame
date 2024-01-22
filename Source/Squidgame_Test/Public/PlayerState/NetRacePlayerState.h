@@ -9,6 +9,15 @@
 /**
  * 
  */
+UENUM()
+enum class ESurvivalState : uint8
+{
+	None,
+	Survival,
+	Death, // 技记 硼厘茄 player 贸府?
+	Complete,
+};
+
 UCLASS()
 class SQUIDGAME_TEST_API ANetRacePlayerState : public APlayerState
 {
@@ -77,6 +86,7 @@ public:
 	bool GetisDead();
 	void SetPassed();
 	bool GetPassed();
+	void SetisDead();
 	bool GetHasCrossedFinish();
 	void ToggleReadyState();
 	virtual void GetLifetimeReplicatedProps(TArray< FLifetimeProperty >& OutLifetimeProps) const override;
