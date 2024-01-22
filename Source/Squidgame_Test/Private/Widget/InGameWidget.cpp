@@ -50,6 +50,29 @@ void UInGameWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
 			}
 		}
 		//TArray<APlayerState*> players = GetWorld()->GetGameState<ANetGameStateBase>()->GetMyPlayerList();
+
+		if (NetGameState->SquidGameState != EGamePlayState::GameOver)
+		{
+			TArray<APlayerState*> players = NetGameState->GetMyPlayerList();
+			playerList = "";
+			playerNonPassedList = "";
+			for (APlayerState* p : players) {
+				ANetRacePlayerState* PlayerState = Cast<ANetRacePlayerState>(p);
+				FString curState = "";
+				if (PlayerState->GetPassed()) {
+					curState = "Success";
+					AddPassPlayerList(p->GetPlayerName(), curState);
+				}
+				else if (PlayerState->isDead) {
+					curState = "Die";
+					AddNonPassPlayerList(p->GetPlayerName(), curState);
+				}
+				else {
+					curState = "Fail";
+					AddNonPassPlayerList(p->GetPlayerName(), curState);
+				}
+			}
+		}
 	}
 }
 
@@ -67,6 +90,18 @@ void UInGameWidget::AddPlayerList(FString playerName, float score, FString curSt
 {
 	playerList.Append(FString::Printf(TEXT("%s %d %s\n"), *playerName, (int32)score, *curState));
 	text_PlayerList->SetText(FText::FromString(playerList));
+}
+
+void UInGameWidget::AddPassPlayerList(FString playerName, FString curState)
+{
+	playerList.Append(FString::Printf(TEXT("%s %s\n"), *playerName, *curState));
+	text_SPlayerList->SetText(FText::FromString(playerList));
+}
+
+void UInGameWidget::AddNonPassPlayerList(FString playerName, FString curState)
+{
+	playerNonPassedList.Append(FString::Printf(TEXT("%s %s\n"), *playerName, *curState));
+	text_DPlayerList->SetText(FText::FromString(playerNonPassedList));
 }
 
 void UInGameWidget::OnExitSession()

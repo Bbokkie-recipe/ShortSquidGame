@@ -39,9 +39,12 @@ public:
 	void UnShowButton();
 	void AddPlayerList(FString playerName, float score, FString curState);
 	void ShowGameResult();
+	void AddPassPlayerList(FString playerName, FString curState);//int32 rank, 
+	void AddNonPassPlayerList(FString playerName, FString curState);//int32 rank, 
 private:
 	class ASquidgame_TestCharacter* player;
 	FString playerList;
+	FString playerNonPassedList;
 	UFUNCTION()
 	void OnExitSession();
 };
