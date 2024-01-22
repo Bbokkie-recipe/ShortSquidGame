@@ -11,6 +11,7 @@
 #include "StageActor/BlockLine.h"
 #include "Net/UnrealNetwork.h"
 #include "Components/CapsuleComponent.h"
+#include "PlayerController/NetRacePlayerController.h"
 
 // Sets default values
 AFinalLine::AFinalLine()
@@ -56,11 +57,18 @@ void AFinalLine::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* Oth
 {
 	player = Cast<ASquidgame_TestCharacter>(OtherActor);
 	ANetRaceGameState* GameState = Cast<ANetRaceGameState>(GetWorld()->GetGameState());
-	if (player != nullptr && GameState && GameState->SquidGameState == EGamePlayState::InProgress)
+	if (player != nullptr && GameState)
 	{
-		if (HasAuthority() ) 
+		if(HasAuthority()) 
 		{
+			APlayerController* _PC = Cast<APlayerController>(player);
+			ANetRacePlayerController* PlayerController = Cast<ANetRacePlayerController>(_PC);
 			ANetRacePlayerState* PlayerState = player->GetPlayerState<ANetRacePlayerState>();
+			if (PlayerController)
+			{
+				float time = PlayerController->CountdownValue;
+				PlayerState->SetArrivalTime(time);
+			}
 			PlayerState->SetPassed();
 			bStartTimer = true;
 		}

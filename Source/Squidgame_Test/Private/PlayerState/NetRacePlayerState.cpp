@@ -121,11 +121,6 @@ bool ANetRacePlayerState::GetPassed()
 	return isPassed;
 }
 
-bool ANetRacePlayerState::GetHasCrossedFinish()
-{
-	return HasCrossedFinishLine;
-}
-
 void ANetRacePlayerState::GetLifetimeReplicatedProps(TArray< FLifetimeProperty >& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
