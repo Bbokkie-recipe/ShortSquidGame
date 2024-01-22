@@ -9,6 +9,8 @@
 #include "GameState/NetRaceGameState.h"
 #include "PlayerState/NetRacePlayerState.h"
 #include "StageActor/BlockLine.h"
+#include "Net/UnrealNetwork.h"
+#include "Components/CapsuleComponent.h"
 
 // Sets default values
 AFinalLine::AFinalLine()
@@ -20,7 +22,7 @@ AFinalLine::AFinalLine()
 	boxComp->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 	boxComp->SetGenerateOverlapEvents(true);
 	boxComp->SetCollisionObjectType(ECC_GameTraceChannel1);
-	boxComp->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap);
+	boxComp->SetCollisionResponseToChannel(ECC_Pawn, ECR_Block);
 	boxComp->SetCollisionResponseToChannel(ECC_WorldStatic, ECR_Block);
 	SetRootComponent(boxComp);
 
@@ -28,10 +30,8 @@ AFinalLine::AFinalLine()
 	meshComp->SetupAttachment(RootComponent);
 	meshComp->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
-	
-
 	bReplicates = true;
-	SetReplicateMovement(true);
+	//SetReplicateMovement(true);
 }
 
 // Called when the game starts or when spawned
@@ -54,11 +54,11 @@ void AFinalLine::Tick(float DeltaTime)
 
 void AFinalLine::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	ASquidgame_TestCharacter* player = Cast<ASquidgame_TestCharacter>(OtherActor);
+	player = Cast<ASquidgame_TestCharacter>(OtherActor);
 	ANetRaceGameState* GameState = Cast<ANetRaceGameState>(GetWorld()->GetGameState());
 	if (player != nullptr && GameState && GameState->SquidGameState == EGamePlayState::InProgress)
 	{
-		if (HasAuthority()) 
+		if (HasAuthority() ) 
 		{
 			ANetRacePlayerState* PlayerState = player->GetPlayerState<ANetRacePlayerState>();
 			PlayerState->SetPassed();
@@ -69,7 +69,6 @@ void AFinalLine::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* Oth
 
 void AFinalLine::ClosedTimer(float deltaTime)
 {
-
 	if (closedTimer < closedCooltime)
 	{
 		closedTimer += deltaTime;
@@ -77,8 +76,8 @@ void AFinalLine::ClosedTimer(float deltaTime)
 	else 
 	{
 		closedTimer = 0;
+		player->GetCapsuleComponent()->SetCollisionResponseToChannel(ECC_GameTraceChannel1, ECR_Block);
 		bStartTimer = false;
-		boxComp->SetCollisionResponseToChannel(ECC_Pawn, ECR_Block);
 	}
 }
 
