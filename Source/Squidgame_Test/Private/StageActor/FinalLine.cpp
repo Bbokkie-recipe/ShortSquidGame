@@ -57,9 +57,9 @@ void AFinalLine::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* Oth
 {
 	player = Cast<ASquidgame_TestCharacter>(OtherActor);
 	ANetRaceGameState* GameState = Cast<ANetRaceGameState>(GetWorld()->GetGameState());
-	if (player != nullptr && GameState && GameState->SquidGameState == EGamePlayState::InProgress)
+	if (player != nullptr && GameState)
 	{
-		if (HasAuthority() ) 
+		if(HasAuthority()) 
 		{
 			APlayerController* _PC = Cast<APlayerController>(player);
 			ANetRacePlayerController* PlayerController = Cast<ANetRacePlayerController>(_PC);

@@ -153,7 +153,10 @@ void ASquidgame_TestCharacter::Tick(float DeltaSeconds)
 		if (GameState)
 		{
 			if (GameState->EndSquidPlay()) {
-				ServerShowResult();
+				float DelayTime = 2.0f;
+				FTimerHandle TimerHandle;
+
+				GetWorldTimerManager().SetTimer(TimerHandle, this, &ASquidgame_TestCharacter::ServerShowResult, DelayTime, false);
 			}
 		}
 	}

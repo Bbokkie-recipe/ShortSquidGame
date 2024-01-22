@@ -27,20 +27,20 @@ bool ANetRaceGameState::DescendingByRemainTime(const APlayerState& ps1, const AP
     const ANetRacePlayerState* PlayerState1 = Cast<const ANetRacePlayerState>(&ps1);
     const ANetRacePlayerState* PlayerState2 = Cast<const ANetRacePlayerState>(&ps2);
 
-    return PlayerState1->GetArrivalTime() > PlayerState2->GetArrivalTime();
+    return PlayerState1->GetArrivalTime() >= PlayerState2->GetArrivalTime();
 }
 
 
 // 오름차순
 bool ANetRaceGameState::AscendingByString(const APlayerState& ps1, const APlayerState& ps2)
 {
-    return ps1.GetPlayerName() < ps2.GetPlayerName();
+    return ps1.GetPlayerName() <= ps2.GetPlayerName();
 }
 
 // 내림차순
 bool ANetRaceGameState::DescendingByString(const APlayerState& ps1, const APlayerState& ps2)
 {
-    return ps1.GetPlayerName() > ps2.GetPlayerName();
+    return ps1.GetPlayerName() >= ps2.GetPlayerName();
 }
 
 ANetRaceGameState::ANetRaceGameState()
@@ -103,36 +103,6 @@ int32 ANetRaceGameState::GetElapsedGameTime() const
     */
     return ElapsedTime;
 }
-
-bool ANetRaceGameState::IsGameOverCondition() const
-{
-    bool AllPlayersDead = true;
-    for (APlayerState* PlayerState : PlayerArray)
-    {
-        ANetRacePlayerState* NetRacePlayer = Cast<ANetRacePlayerState>(PlayerState); 
-        if (NetRacePlayer && NetRacePlayer->GetisDead())
-        {
-            AllPlayersDead = false;
-            break;
-        }
-    }
-
-    bool TimeExpired = (ElapsedTime >= 180);
-
-    bool AllCrossedFinish = true;
-    for (APlayerState* PlayerState : PlayerArray)
-    {
-        ANetRacePlayerState* NetRacePlayer = Cast<ANetRacePlayerState>(PlayerState);
-        if (NetRacePlayer && !NetRacePlayer->GetHasCrossedFinish())
-        {
-            AllCrossedFinish = false;
-            break;
-        }
-    }
-
-    return AllPlayersDead || TimeExpired || AllCrossedFinish;
-}
-
 
 void ANetRaceGameState::GetLifetimeReplicatedProps(TArray< FLifetimeProperty >& OutLifetimeProps) const
 {
@@ -220,6 +190,7 @@ bool ANetRaceGameState::EndSquidPlay()
     if (SquidGameState == EGamePlayState::GameOver) {
         return true;
     }
+
     return AllPlayersDone;
 }
 

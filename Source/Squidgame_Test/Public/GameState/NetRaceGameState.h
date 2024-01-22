@@ -62,7 +62,6 @@ protected:
 	UPROPERTY()
 	class ADoll* FoundDoll;
 public:
-	bool IsGameOverCondition() const;
 	void StartGame();
 	void EndGame();
 	void DoolSongState();

@@ -51,7 +51,7 @@ void UInGameWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
 		}
 		//TArray<APlayerState*> players = GetWorld()->GetGameState<ANetGameStateBase>()->GetMyPlayerList();
 
-		if (NetGameState->SquidGameState != EGamePlayState::GameOver)
+		if (NetGameState)
 		{
 			TArray<APlayerState*> players = NetGameState->GetMyPlayerList();
 			playerList = "";
@@ -62,10 +62,6 @@ void UInGameWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
 				if (PlayerState->GetPassed()) {
 					curState = "Success";
 					AddPassPlayerList(p->GetPlayerName(), curState);
-				}
-				else if (!PlayerState->GetPassed() && !PlayerState->GetisDead()) {
-					curState = "Fail";
-					AddNonPassPlayerList(p->GetPlayerName(), curState);
 				}
 				else if (PlayerState->isDead) {
 					curState = "Die";
