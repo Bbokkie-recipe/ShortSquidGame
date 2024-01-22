@@ -42,4 +42,6 @@ private:
 	bool bStartTimer = false;
 
 	float closedTimer = 0;
+
+	class ASquidgame_TestCharacter* player;
 };
