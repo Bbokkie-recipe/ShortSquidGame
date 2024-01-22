@@ -11,6 +11,7 @@
 
 TArray<class APlayerState*> ANetRaceGameState::GetMyPlayerList()
 {
+    PlayerArray.Sort(ANetRaceGameState::DescendingByRemainTime);
     // 이름순 정렬
     PlayerArray.Sort(ANetRaceGameState::AscendingByString);
     // 점수순 정렬
@@ -20,6 +21,15 @@ TArray<class APlayerState*> ANetRaceGameState::GetMyPlayerList()
 
     return PlayerArray;
 }
+
+bool ANetRaceGameState::DescendingByRemainTime(const APlayerState& ps1, const APlayerState& ps2)
+{
+    const ANetRacePlayerState* PlayerState1 = Cast<const ANetRacePlayerState>(&ps1);
+    const ANetRacePlayerState* PlayerState2 = Cast<const ANetRacePlayerState>(&ps2);
+
+    return PlayerState1->GetArrivalTime() > PlayerState2->GetArrivalTime();
+}
+
 
 // 오름차순
 bool ANetRaceGameState::AscendingByString(const APlayerState& ps1, const APlayerState& ps2)

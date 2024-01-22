@@ -36,6 +36,7 @@ public:
 	static bool DescendingByString(const APlayerState& ps1, const APlayerState& ps2);
 	static bool AscendingByScore(const APlayerState& ps1, const APlayerState& ps2);
 	static bool DescendingByScore(const APlayerState& ps1, const APlayerState& ps2);
+	static bool DescendingByRemainTime(const APlayerState& ps1, const APlayerState& ps2);
 public:
 	ANetRaceGameState();
 

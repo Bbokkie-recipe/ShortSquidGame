@@ -11,6 +11,7 @@
 #include "StageActor/BlockLine.h"
 #include "Net/UnrealNetwork.h"
 #include "Components/CapsuleComponent.h"
+#include "PlayerController/NetRacePlayerController.h"
 
 // Sets default values
 AFinalLine::AFinalLine()
@@ -60,7 +61,14 @@ void AFinalLine::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* Oth
 	{
 		if (HasAuthority() ) 
 		{
+			APlayerController* _PC = Cast<APlayerController>(player);
+			ANetRacePlayerController* PlayerController = Cast<ANetRacePlayerController>(_PC);
 			ANetRacePlayerState* PlayerState = player->GetPlayerState<ANetRacePlayerState>();
+			if (PlayerController)
+			{
+				float time = PlayerController->CountdownValue;
+				PlayerState->SetArrivalTime(time);
+			}
 			PlayerState->SetPassed();
 			bStartTimer = true;
 		}
