@@ -79,4 +79,6 @@ public:
 	float SongALength;
 
 	float SongBLength;
+
+
 };

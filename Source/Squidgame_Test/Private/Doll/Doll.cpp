@@ -83,6 +83,9 @@ void ADoll::SwitchTimer(float deltaTime)
 		{
 			myGameState->SearchMoving();
 			UE_LOG(LogTemp, Warning, TEXT("Detect time"));
+			if (!HasAuthority()) {
+				SearchAudio->Play();
+			}
 			FVector NewRelativeLocation = HeadStaticMesh->GetRelativeLocation();
 			NewRelativeLocation.Y += 20.f;
 			HeadStaticMesh->SetRelativeLocation(NewRelativeLocation);
@@ -115,6 +118,9 @@ void ADoll::DetectingMode(float deltaTime)
 		if (myGameState)
 		{
 			myGameState->SingSong();
+			if (!HasAuthority()) {
+				DoolAudio->Play();
+			}
 			UE_LOG(LogTemp, Warning, TEXT("Sing Song"));
 			FVector NewRelativeLocation = HeadStaticMesh->GetRelativeLocation();
 			NewRelativeLocation.Y = 0.f;
@@ -128,15 +134,20 @@ void ADoll::StartDoolAudio()
 {
 	if (DoolAudio)
 	{
-		if (GetLocalRole() == ENetRole::ROLE_Authority) {
-			ANetRaceGameState* GameState = GetWorld()->GetGameState<ANetRaceGameState>();
-			if (GameState)
+		if (HasAuthority()) {
+			UWorld* World = GetWorld();
+			if (World)
 			{
-				GameState->DoolSongState();
+				// 서버에서 실행할 코드 추가
+				ANetRaceGameState* GameState = World->GetGameState<ANetRaceGameState>();
+				if (GameState)
+				{
+					GameState->DoolSongState();
+				}
 			}
 		}
+
 		DoolAudio->Play();
-		
 
 		GetWorldTimerManager().SetTimer(
 			SongTimerHandle,
@@ -153,15 +164,19 @@ void ADoll::StartSearchAudio()
 	UE_LOG(LogTemp, Warning, TEXT("StartSearchAudio"));
 	if (SearchAudio)
 	{
-		if (GetLocalRole() == ENetRole::ROLE_Authority) {
-			ANetRaceGameState* GameState = GetWorld()->GetGameState<ANetRaceGameState>();
-			if (GameState)
+		if (HasAuthority()) {
+			UWorld* World = GetWorld();
+			if (World)
 			{
-				GameState->DoolSearchState();
+				// 서버에서 실행할 코드 추가
+				ANetRaceGameState* GameState = World->GetGameState<ANetRaceGameState>();
+				if (GameState)
+				{
+					GameState->DoolSearchState();
+				}
 			}
 		}
 		SearchAudio->Play();
-		
 
 		GetWorldTimerManager().SetTimer(
 			SongTimerHandle,
