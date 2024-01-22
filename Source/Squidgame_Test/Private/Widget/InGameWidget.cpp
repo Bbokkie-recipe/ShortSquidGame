@@ -62,10 +62,10 @@ void UInGameWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
 				if (PlayerState->GetPassed()) {
 					curState = "Success";
 					AddPassPlayerList(p->GetPlayerName(), curState);
-				if (!PlayerState->GetPassed() && !PlayerState->isDead) {
+				}
+				else if (!PlayerState->GetPassed() && !PlayerState->GetisDead()) {
 					curState = "Fail";
 					AddNonPassPlayerList(p->GetPlayerName(), curState);
-				}
 				}
 				else if (PlayerState->isDead) {
 					curState = "Die";
