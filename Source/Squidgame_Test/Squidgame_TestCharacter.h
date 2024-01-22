@@ -65,6 +65,8 @@ public:
 
 	bool bAlive = true;
 
+	bool bRunnable = false;
+
 protected:
 
 	/** Called for movement input */
