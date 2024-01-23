@@ -70,4 +70,9 @@ public:
 	FString GetGameStateAsString();
 	virtual void GetLifetimeReplicatedProps(TArray< FLifetimeProperty >& OutLifetimeProps) const override;
 	bool EndSquidPlay();
+
+	UFUNCTION(Server, Reliable)
+	void serverDollSongStart(class ADoll* _FoundDoll);
+	UFUNCTION(NetMulticast, Reliable)
+	void MulticastDollSongStart(class ADoll* _FoundDoll);
 };

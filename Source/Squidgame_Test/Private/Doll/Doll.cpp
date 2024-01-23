@@ -24,7 +24,9 @@ ADoll::ADoll()
 	BowTieStaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("BowTieStaticMesh"));
 	BowTieStaticMesh->SetupAttachment(RootComponent);
 	DoolAudio = CreateDefaultSubobject<UAudioComponent>(TEXT("DoolAudio"));
+	DoolAudio->SetupAttachment(RootComponent);
 	SearchAudio = CreateDefaultSubobject<UAudioComponent>(TEXT("SearchAudio"));
+	SearchAudio->SetupAttachment(RootComponent);
 	
 	bReplicates = true;
 }
@@ -84,9 +86,9 @@ void ADoll::SwitchTimer(float deltaTime)
 		{
 			myGameState->SearchMoving();
 			UE_LOG(LogTemp, Warning, TEXT("Detect time"));
-			if (!HasAuthority()) {
-				SearchAudio->Play();
-			}
+			//if (!HasAuthority()) {
+			//	SearchAudio->Play();
+			//}
 			FVector NewRelativeLocation = HeadStaticMesh->GetRelativeLocation();
 			NewRelativeLocation.Y += 20.f;
 			HeadStaticMesh->SetRelativeLocation(NewRelativeLocation);
@@ -112,9 +114,9 @@ void ADoll::DetectingMode(float deltaTime)
 		if (myGameState)
 		{
 			myGameState->SingSong();
-			if (!HasAuthority()) {
-				DoolAudio->Play();
-			}
+			//if (!HasAuthority()) {
+			//	DoolAudio->Play();
+			//}
 			UE_LOG(LogTemp, Warning, TEXT("Sing Song"));
 			FVector NewRelativeLocation = HeadStaticMesh->GetRelativeLocation();
 			NewRelativeLocation.Y = 0.f;
@@ -126,60 +128,52 @@ void ADoll::DetectingMode(float deltaTime)
 
 void ADoll::StartDoolAudio()
 {
-	if (DoolAudio)
+	UE_LOG(LogTemp, Warning, TEXT("Name: %s"), *GetActorNameOrLabel());
+	//UE_LOG(LogTemp, Warning, TEXT("%s"), DoolAudio != nullptr ? *FString("Get Audio") : *FString("No Audio"));
+	UWorld* World = GetWorld();
+	if (World)
 	{
-		if (HasAuthority()) {
-			UWorld* World = GetWorld();
-			if (World)
-			{
-				// 서버에서 실행할 코드 추가
-				ANetRaceGameState* GameState = World->GetGameState<ANetRaceGameState>();
-				if (GameState)
-				{
-					GameState->DoolSongState();
-				}
-			}
+		ANetRaceGameState* GameState = World->GetGameState<ANetRaceGameState>();
+		if (GameState)
+		{
+			GameState->DoolSongState();
 		}
-
-		DoolAudio->Play();
-
-		GetWorldTimerManager().SetTimer(
-			SongTimerHandle,
-			this,
-			&ADoll::StartSearchAudio,
-			SongALength,
-			false
-		);
 	}
+	DoolAudio->Play();
+
+	GetWorldTimerManager().SetTimer(
+		SongTimerHandle,
+		this,
+		&ADoll::StartSearchAudio,
+		SongALength,
+		false
+	);
 }
 
 void ADoll::StartSearchAudio()
 {
 	UE_LOG(LogTemp, Warning, TEXT("StartSearchAudio"));
-	if (SearchAudio)
-	{
-		if (HasAuthority()) {
-			UWorld* World = GetWorld();
-			if (World)
-			{
-				// 서버에서 실행할 코드 추가
-				ANetRaceGameState* GameState = World->GetGameState<ANetRaceGameState>();
-				if (GameState)
-				{
-					GameState->DoolSearchState();
-				}
-			}
-		}
-		SearchAudio->Play();
 
-		GetWorldTimerManager().SetTimer(
-			SongTimerHandle,
-			this,
-			&ADoll::StartDoolAudio,
-			SongBLength,
-			false
-		);
+	UWorld* World = GetWorld();
+	if (World)
+	{
+		// 서버에서 실행할 코드 추가
+		ANetRaceGameState* GameState = World->GetGameState<ANetRaceGameState>();
+		if (GameState)
+		{
+			GameState->DoolSearchState();
+		}
 	}
+	SearchAudio->Play();
+
+	GetWorldTimerManager().SetTimer(
+		SongTimerHandle,
+		this,
+		&ADoll::StartDoolAudio,
+		SongBLength,
+		false
+	);
+
 }
 
 void ADoll::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const

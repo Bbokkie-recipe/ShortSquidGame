@@ -138,6 +138,7 @@ bool ANetRaceGameState::ReadyPlay()
     if (AllPlayersReady)
     {
         for (APlayerState* PlayerState : Players) {
+            
             //UE_LOG(LogTemp, Warning, TEXT("APlayerState* PlayerState : Players"));
             ANetRaceGameMode* MyGameMode = Cast<ANetRaceGameMode>(UGameplayStatics::GetGameMode(GetWorld()));
             if (MyGameMode)
@@ -146,20 +147,36 @@ bool ANetRaceGameState::ReadyPlay()
                 MyGameMode->StartRaceGame();
             }
         }
+        if (HasAuthority()) {
 
-        FTimerHandle createHandler;
-        GetWorld()->GetTimerManager().SetTimer(createHandler, FTimerDelegate::CreateLambda([&]() {
-            FoundDoll->StartDoolAudio();
-            }), 1.0f, false);
+            serverDollSongStart(FoundDoll);
+        }
     }
     return AllPlayersReady;
 }
 
+void ANetRaceGameState::serverDollSongStart_Implementation(class ADoll* _FoundDoll)
+{
+    UE_LOG(LogTemp, Warning, TEXT("_FoundDoll serverDollSongStart_Implementation"));
+    MulticastDollSongStart(_FoundDoll);
+}
+
+void ANetRaceGameState::MulticastDollSongStart_Implementation(class ADoll* _FoundDoll)
+{
+    //wolrd()->aoll->Audio();
+    
+    FTimerHandle createHandler;
+    if (_FoundDoll) {
+        UE_LOG(LogTemp, Warning, TEXT("_FoundDoll sMulticastDollSongStart_Implementation"));
+        GetWorld()->GetTimerManager().SetTimer(createHandler, FTimerDelegate::CreateLambda([&]() {
+            Cast<ADoll>(UGameplayStatics::GetActorOfClass(GetWorld(), ADoll::StaticClass()))->StartDoolAudio();
+            }), 1.0f, false);
+    }
+}
+
 void ANetRaceGameState::SearchDoll()
 {
-    if (HasAuthority()) {
-        FoundDoll = Cast<ADoll>(UGameplayStatics::GetActorOfClass(GetWorld(), ADoll::StaticClass()));
-    }
+    FoundDoll = Cast<ADoll>(UGameplayStatics::GetActorOfClass(GetWorld(), ADoll::StaticClass()));
 }
 
 
