@@ -21,6 +21,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "Widget/InGameWidget.h"
 #include "GameState/NetRaceGameState.h"
+#include "TimerManager.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -248,11 +249,11 @@ void ASquidgame_TestCharacter::Run()
 void ASquidgame_TestCharacter::RunCooltimeTimer(float deltaTime)
 {
 	
-	if (runTimer < coolTime)
+	if (runTimer < runCoolTime)
 	{
 		runTimer += deltaTime;
 	}
-	else if (runTimer >= coolTime)
+	else if (runTimer >= runCoolTime)
 	{
 		runReady = true;
 		runTimer = 0;
@@ -280,6 +281,7 @@ void ASquidgame_TestCharacter::CheckMovement(bool isDetecting)
 	currentPos = GetActorLocation();
 	currentRot = GetActorRotation();
 
+
 	if (isDetecting)
 	{
 		FVector subtractVector = UKismetMathLibrary::Subtract_VectorVector(currentPos, originPos);
@@ -290,7 +292,8 @@ void ASquidgame_TestCharacter::CheckMovement(bool isDetecting)
 				GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Dead"));*/
 			ANetRacePlayerState* MyPlayerState = Cast<ANetRacePlayerState>(GetController()->PlayerState);
 			if (MyPlayerState) {
-				Dead();
+				//UGameplayStatics::PlaySoundAtLocation(GetWorld(), LaughingSound, GetActorLocation());
+				GetWorld()->GetTimerManager().SetTimer(MyTimerHandle, this, &ASquidgame_TestCharacter::Dead, 0.5f, false);
 			}
 		}
 		else if (subtractVector == FVector(0, 0, 0))
