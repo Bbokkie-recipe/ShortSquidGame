@@ -235,16 +235,16 @@ void ASquidgame_TestCharacter::Run()
 			GetCharacterMovement()->MaxWalkSpeed = 500.f;
 			bRunning = false;
 			runReady = false;
-			if (GEngine)
-				GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Running!"));
+		/*	if (GEngine)
+				GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Running!"));*/
 		}
 		else
 		{
 			GetCharacterMovement()->MaxWalkSpeed = 250.f;
 			bRunning = true;
 			runReady = false;
-			if (GEngine)
-				GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Walking!"));
+			/*if (GEngine)
+				GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Walking!"));*/
 		}
 	}
 }
@@ -384,5 +384,4 @@ void ASquidgame_TestCharacter::MulticastShowResult_Implementation()
 			InGameUI->ShowGameResult();
 		}
 	}
-
 }
