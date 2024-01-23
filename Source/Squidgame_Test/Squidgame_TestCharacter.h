@@ -55,11 +55,11 @@ public:
 	UPROPERTY(BlueprintReadOnly)
 	bool bRunning = false;
 
-	float coolTime = 1.0f;
+	float runCoolTime = 0.5f;
 
 	float runTimer;
 
-	bool runReady = true;
+	bool runReady = false;
 
 	bool bDetecting = true;
 
@@ -130,6 +130,11 @@ public:
 	void PrintInfoLog();
 private:
 	class UInGameWidget* InGameUI;
+
+	UPROPERTY(EditAnywhere, Category= "Sound")
+	class USoundBase* LaughingSound;
+
+	FTimerHandle MyTimerHandle;
 
 public:
 	UFUNCTION(Server, Reliable)

@@ -9,6 +9,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "Doll/Doll.h"
 #include "GameState/NetRaceGameState.h"
+#include "PlayerState/NetRacePlayerState.h"
 
 // Sets default values
 ALaser::ALaser()
@@ -37,14 +38,19 @@ void ALaser::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-    Laser();
+    if (bLaser)
+    {
+        Laser();
+    }
+
 }
 
 void ALaser::Laser()
 {
     APlayerController* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
     ANetRaceGameState* myGameState = GetWorld()->GetGameState<ANetRaceGameState>();
-
+    ANetRacePlayerState* myPlayerState = PlayerController->GetPlayerState<ANetRacePlayerState>();
+    
     if (PlayerController)
     {
         StartPoint = GetActorLocation();
@@ -53,19 +59,27 @@ void ALaser::Laser()
         LaserParticle->SetBeamEndPoint(0, EndPoint);
     }
 
-    if (myGameState != nullptr)
+    if (myGameState != nullptr && myPlayerState != nullptr)
     {
-        if (myGameState->SongState == ESongState::DollSong)
+        if (!(myPlayerState->GetPassed()) && !(myPlayerState->GetisDead()))
         {
-            LaserParticle->Activate(true);
-        }
-        else if (myGameState->SongState == ESongState::SearchTime)
-        {
-            LaserParticle->Activate(false);
+            if (myGameState->SongState == ESongState::DollSong)
+            {
+                LaserParticle->Activate(true);
+            }
+            else if (myGameState->SongState == ESongState::SearchTime)
+            {
+                LaserParticle->Activate(false);
+            }
+            else
+            {
+                LaserParticle->Activate(true);
+            }
         }
         else
         {
             LaserParticle->Activate(true);
+            bLaser = false;
         }
     }
 }
