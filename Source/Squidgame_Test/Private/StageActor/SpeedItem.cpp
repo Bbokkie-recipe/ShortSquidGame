@@ -41,8 +41,8 @@ void ASpeedItem::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* Oth
 	ASquidgame_TestCharacter* player = Cast<ASquidgame_TestCharacter>(OtherActor);
 	if (player != nullptr)
 	{
-		if (GEngine)
-			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("speed Item!"));
+		/*if (GEngine)
+			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("speed Item!"));*/
 
 		player->bRunnable = true;
 		player->runReady = true;
