@@ -84,7 +84,7 @@ void UInGameWidget::UnShowButton()
 
 void UInGameWidget::AddPlayerList(FString playerName, float score, FString curState)
 {
-	playerList.Append(FString::Printf(TEXT("%s %d %s\n"), *playerName, (int32)score, *curState));
+	playerList.Append(FString::Printf(TEXT("%s %s\n"), *playerName, *curState));
 	text_PlayerList->SetText(FText::FromString(playerList));
 }
 
