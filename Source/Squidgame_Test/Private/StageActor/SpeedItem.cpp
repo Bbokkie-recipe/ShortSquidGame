@@ -5,6 +5,7 @@
 #include "Components/BoxComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "Squidgame_Test/Squidgame_TestCharacter.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 ASpeedItem::ASpeedItem()
@@ -25,6 +26,7 @@ void ASpeedItem::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	boxComp->OnComponentBeginOverlap.AddDynamic(this, &ASpeedItem::OnOverlap);
 }
 
 // Called every frame
@@ -43,7 +45,10 @@ void ASpeedItem::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* Oth
 			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("speed Item!"));
 
 		player->bRunnable = true;
+		player->runReady = true;
 		this->Destroy();
+		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), EatingEffect, GetActorLocation());
+		UGameplayStatics::PlaySoundAtLocation(GetWorld(), EatingSound, GetActorLocation());
 	}
 }
 

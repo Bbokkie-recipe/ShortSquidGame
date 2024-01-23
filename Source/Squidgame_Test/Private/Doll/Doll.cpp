@@ -9,6 +9,7 @@
 #include "PlayerController/NetRacePlayerController.h"
 #include "GameState/NetRaceGameState.h"
 #include "PlayerState/NetRacePlayerState.h"
+#include "Squidgame_Test/Squidgame_TestCharacter.h"
 
 ADoll::ADoll()
 {
@@ -34,11 +35,12 @@ void ADoll::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	spareTime = 0.5f;
+	spareTime = 0.8f;
 	SongALength = DoolAudio->Sound->GetDuration();
 	SongBLength = SearchAudio->Sound->GetDuration();
 	switchCooltime = SongBLength + spareTime;
-	detectCooltime = SongALength + spareTime;
+	detectCooltime = SongALength - spareTime;
+	
 }
 
 // Called every frame
