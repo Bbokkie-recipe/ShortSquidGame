@@ -23,7 +23,7 @@ Developed with Unreal Engine 5
 
 - game Ready등의 player state 실시간 동기화 -> UI 출력   
   (하단 캡처: 리슨 서버 호스트 start와 참가자 ready)   
-  ![image](https://github.com/Bbokkie-recipe/ShortSquidGame/assets/93479286/fe850097-76c3-4dee-8d61-13fb1b3909d3)
+![image](https://github.com/Bbokkie-recipe/ShortSquidGame/assets/93479286/b1d02e9a-4100-407e-8ea4-2b142276f43e)   
 
 - 플레이어 애니메이션 동기화   
 ![image](https://github.com/Bbokkie-recipe/hnm-clone/assets/93479286/0762b3b3-820a-489c-9d91-46e8b0ff9717)   
