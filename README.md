@@ -10,12 +10,16 @@ Developed with Unreal Engine 5
 
 🧑🏻‍💻 Team   
 - memberA : Game State 시스템 및 UI/사운드 동기화, 맵   
-- memberB : 플레이어 애니메이션, Doll 타이머, stage Actors(Line, Item)   
+- memberB : 플레이어 애니메이션, Doll 타이머, stage Actors(Line, Item)
 
 🎞️ 게임 소개      
 ![image](https://github.com/Bbokkie-recipe/ShortSquidGame/assets/93479286/98222e17-53ff-497d-882c-0e65783f68bc)
 넷플릭스 드라마 '오징어게임' 오마주.   
-‘무궁화 꽃이 피었습니다’ 게임 룰에 따라 노래가 흐를 때만 이동하여 Final Line에 도달하면 생존
+‘무궁화 꽃이 피었습니다’ 게임 룰에 따라 노래가 흐를 때만 이동하여 Final Line에 도달하면 생존   
+
+🔠 프로젝트 프로세스, 구조
+![image](https://github.com/Bbokkie-recipe/ShortSquidGame/assets/93479286/ef19e694-cf60-482a-9093-ab923a5025d2)   
+![image](https://github.com/Bbokkie-recipe/ShortSquidGame/assets/93479286/11880b15-489a-4d81-8bad-e7997fe5a4b4)   
 
 🛠️ 주요 기능   
 - 세션 create, find, join 기능
