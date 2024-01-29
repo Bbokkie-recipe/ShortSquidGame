@@ -32,7 +32,8 @@ Developed with Unreal Engine 5
 - 플레이어 애니메이션 동기화   
 ![image](https://github.com/Bbokkie-recipe/hnm-clone/assets/93479286/0762b3b3-820a-489c-9d91-46e8b0ff9717)   
 
-- Final Line 통과 플레이어목록 업데이트에 따른 결과 UI
+- Final Line 통과 플레이어목록 집계 및 업데이트에 따른 결과 UI   
+- 통과 플레이어는 다시 진입 못하도록 Final Line에 대한 플레이어 collision설정을 ECR_Block으로 변경   
 ![image](https://github.com/Bbokkie-recipe/hnm-clone/assets/93479286/b9d6fbe0-7dab-4830-8a2a-18327d2ad0a2)   
 
 - Doll Sound 동기화    
