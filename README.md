@@ -30,16 +30,16 @@ Developed with Unreal Engine 5
 ![image](https://github.com/Bbokkie-recipe/ShortSquidGame/assets/93479286/b1d02e9a-4100-407e-8ea4-2b142276f43e)   
 
 - 플레이어 애니메이션 동기화   
-![image](https://github.com/Bbokkie-recipe/hnm-clone/assets/93479286/0762b3b3-820a-489c-9d91-46e8b0ff9717)   
+![image](https://github.com/Bbokkie-recipe/hnm-clone/assets/93479286/0762b3b3-820a-489c-9d91-46e8b0ff9717)
 
-- Final Line 통과 플레이어목록 집계 및 업데이트에 따른 결과 UI   
-- 통과 플레이어는 다시 진입 못하도록 Final Line에 대한 플레이어 collision설정을 ECR_Block으로 변경   
-![image](https://github.com/Bbokkie-recipe/hnm-clone/assets/93479286/b9d6fbe0-7dab-4830-8a2a-18327d2ad0a2)   
-
-- Doll Sound 동기화    
-https://github.com/Bbokkie-recipe/ShortSquidGame/commit/aa7f69b9eeea6957270d43c8b9e40401ccb9eacc
+- Doll Sound 동기화 및 Doll State 변경   
+https://github.com/Bbokkie-recipe/ShortSquidGame/commit/aa7f69b9eeea6957270d43c8b9e40401ccb9eacc   
 
 - Doll State에 맞춘 Player 움직임 Die 판정 및 Laser On & Off    
 https://github.com/Bbokkie-recipe/ShortSquidGame/commit/b36acad5cd96827e67d8a5edd39f02130c71e6a3
 ![image](https://github.com/Bbokkie-recipe/hnm-clone/assets/93479286/24530b0d-03de-4c99-9eb9-b606c11b894d)
 ![image](https://github.com/Bbokkie-recipe/hnm-clone/assets/93479286/a1044d35-89a1-44e2-a07b-b7c626061ffb)
+
+- Final Line 통과 플레이어목록 집계 및 업데이트에 따른 결과 UI   
+- 통과 플레이어는 다시 진입 못하도록 Final Line에 대한 플레이어 collision설정을 ECR_Block으로 변경   
+![image](https://github.com/Bbokkie-recipe/hnm-clone/assets/93479286/b9d6fbe0-7dab-4830-8a2a-18327d2ad0a2)   
