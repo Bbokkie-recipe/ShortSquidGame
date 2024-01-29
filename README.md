@@ -39,8 +39,7 @@ Developed with Unreal Engine 5
 - Doll Sound 동기화    
 https://github.com/Bbokkie-recipe/ShortSquidGame/commit/aa7f69b9eeea6957270d43c8b9e40401ccb9eacc
 
-- Doll 타이머 State에 맞춘 Player 움직임 Die 판정
-- Doll State에 맞춘 Laser On & Off   
+- Doll State에 맞춘 Player 움직임 Die 판정 및 Laser On & Off    
 https://github.com/Bbokkie-recipe/ShortSquidGame/commit/b36acad5cd96827e67d8a5edd39f02130c71e6a3
 ![image](https://github.com/Bbokkie-recipe/hnm-clone/assets/93479286/24530b0d-03de-4c99-9eb9-b606c11b894d)
 ![image](https://github.com/Bbokkie-recipe/hnm-clone/assets/93479286/a1044d35-89a1-44e2-a07b-b7c626061ffb)
