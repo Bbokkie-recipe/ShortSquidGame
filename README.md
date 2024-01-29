@@ -29,11 +29,11 @@ Developed with Unreal Engine 5
   (하단 캡처: 리슨 서버 호스트 start와 참가자 ready)   
 ![image](https://github.com/Bbokkie-recipe/ShortSquidGame/assets/93479286/b1d02e9a-4100-407e-8ea4-2b142276f43e)   
 
-- 플레이어 애니메이션 동기화   
-![image](https://github.com/Bbokkie-recipe/hnm-clone/assets/93479286/0762b3b3-820a-489c-9d91-46e8b0ff9717)
-
 - Doll Sound 동기화 및 Doll State 변경   
-https://github.com/Bbokkie-recipe/ShortSquidGame/commit/aa7f69b9eeea6957270d43c8b9e40401ccb9eacc   
+https://github.com/Bbokkie-recipe/ShortSquidGame/commit/aa7f69b9eeea6957270d43c8b9e40401ccb9eacc
+
+- 플레이어 애니메이션 동기화   
+![image](https://github.com/Bbokkie-recipe/hnm-clone/assets/93479286/0762b3b3-820a-489c-9d91-46e8b0ff9717)   
 
 - Doll State에 맞춘 Player 움직임 Die 판정 및 Laser On & Off    
 https://github.com/Bbokkie-recipe/ShortSquidGame/commit/b36acad5cd96827e67d8a5edd39f02130c71e6a3
